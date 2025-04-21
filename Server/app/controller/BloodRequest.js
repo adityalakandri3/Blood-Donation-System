@@ -1,68 +1,67 @@
-const BloodRequest = require("../model/BloodRequest");
-const User = require("../models/User");
+const BloodRequestModel = require('../model/BloodRequest');
 
 class BloodRequestController {
-  // Create Blood Request
-  static async createRequest(req, res) {
-    const { bloodType, location } = req.body;
+  // Create a blood request
+  async createBloodRequest(req, res) {
     try {
-      const request = new BloodRequest({
-        recipent: req.user.id,
+      const { recipent, bloodType, location } = req.body;
+
+      const bloodRequest = new BloodRequestModel({
+        recipent,
         bloodType,
-        location
+        location,
       });
-      await request.save();
-      res.status(201).json(request);
+
+      await bloodRequest.save();
+      res.status(201).json({ message: 'Blood request created successfully', bloodRequest });
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      res.status(500).json({ message: 'Error creating blood request', error });
     }
   }
 
-  // Get My Blood Requests
-  static async getMyRequests(req, res) {
+  // Get all blood requests
+  async getAllBloodRequests(req, res) {
     try {
-      const requests = await BloodRequest.find({ recipent: req.user.id });
-      res.json(requests);
+      const bloodRequests = await BloodRequestModel.find();
+      res.status(200).json({ bloodRequests });
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      res.status(500).json({ message: 'Error fetching blood requests', error });
     }
   }
 
-  // Update Blood Request
-  static async updateRequest(req, res) {
+  // Update blood request status
+  async updateBloodRequestStatus(req, res) {
     try {
-      const request = await BloodRequest.findByIdAndUpdate(
-        req.params.id,
-        req.body,
+      const { id } = req.params;
+      const { status } = req.body;
+
+      const bloodRequest = await BloodRequestModel.findByIdAndUpdate(
+        id,
+        { status },
         { new: true }
       );
-      res.json(request);
+
+      if (!bloodRequest) {
+        return res.status(404).json({ message: 'Blood request not found' });
+      }
+
+      res.status(200).json({ message: 'Blood request updated', bloodRequest });
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      res.status(500).json({ message: 'Error updating blood request', error });
     }
   }
 
-  // Delete Blood Request
-  static async deleteRequest(req, res) {
+  // Get blood requests by status
+  async getBloodRequestsByStatus(req, res) {
     try {
-      await BloodRequest.findByIdAndDelete(req.params.id);
-      res.json({ message: "Request deleted" });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  }
+      const { status } = req.params;
+      const bloodRequests = await BloodRequestModel.find({ status });
 
-  // Find Matching Donors
-  static async findMatchingDonors(req, res) {
-    const { bloodType, location } = req.query;
-    try {
-      const donors = await User.find({ role: "donor", bloodType, location })
-        .select("-password");
-      res.json(donors);
+      res.status(200).json({ bloodRequests });
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      res.status(500).json({ message: 'Error fetching blood requests by status', error });
     }
   }
 }
 
-module.exports = BloodRequestController();
+module.exports = new BloodRequestController();
