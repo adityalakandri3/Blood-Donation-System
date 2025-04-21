@@ -18,10 +18,6 @@ dbConnect()
 app.use(cors());
 
 
-//body parser
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
 //sessions and cookies
 app.use(session({
     secret: 'keyboardcat',

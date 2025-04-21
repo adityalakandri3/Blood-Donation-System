@@ -23,22 +23,25 @@ const UserSchema = new Schema(
     },
     bloodType: {
       type: String,
-      required :true,
+      enum: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],
+      required: true,
     },
     location: {
-        state: {
-          type: String,
-          required: true,
-        },
-        city: {
-          type: String,
-          required: true,
-        },
-      }
+      state: {
+        type: String,
+        required: true,
+      },
+      city: {
+        type: String,
+        required: true,
+      },
+    },
   },
-  { timestamps: true }
+  {
+    versionKey:false,
+    timestamps: true,
+  }
 );
 
-
-const UserModel = mongoose.model('users',UserSchema);
+const UserModel = mongoose.model("users", UserSchema);
 module.exports = UserModel;
