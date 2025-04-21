@@ -3,12 +3,55 @@ const app = express();
 const path = require('path');
 const fs = require('fs')
 const ejs = require('ejs')
+const cors = require('cors');
+const session=require('express-session');
+const cookieParser=require('cookie-parser');
+const bodyParser=require('body-parser');
+const dotenv = require('dotenv');
+
+//database connection
+const dbConnect = require('./app/config/db')
+dotenv.config();
+dbConnect()
+
+//setting up cors
+app.use(cors());
 
 
+//body parser
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+//sessions and cookies
+app.use(session({
+    secret: 'keyboardcat',
+    resave: false,
+    saveUninitialized: false,
+    cookie: { 
+        maxAge: 1000 * 60 * 60 * 24 // 24 hours
+     }
+  }))
+
+  app.use(cookieParser());
 
 //setting up template engine
 app.set('view engine','ejs')
 app.set('views','views')
+
+
+//setup body parser
+app.use(express.json({
+    limit:'50mb',
+    extended:true
+}));
+app.use(express.urlencoded({extended:true}))
+
+//static folder
+app.use(express.static('public'))
+app.use('/uploads',express.static('uploads'))
+app.use('uploads',express.static(path.join(__dirname,'/uploads')));
+
+
 
 //Routes
 const UserRoute = require('./app/router/UserRouter')
