@@ -3,8 +3,9 @@ const Schema = mongoose.Schema;
 
 const bloodRequestSchema = new Schema(
   {
-    recipent: {
-      type: String,
+    recipient: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "users", 
       required: true,
     },
 
@@ -13,6 +14,7 @@ const bloodRequestSchema = new Schema(
       enum: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],
       required: true,
     },
+
     location: {
       state: {
         type: String,
@@ -23,10 +25,17 @@ const bloodRequestSchema = new Schema(
         required: true,
       },
     },
+
     status: {
       type: String,
-      enum: ["pending", "fulfilled", "rejected"],
+      enum: ["pending", "accepted"],
       default: "pending",
+    },
+
+    donor: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "users", 
+      default: null,
     },
   },
   {

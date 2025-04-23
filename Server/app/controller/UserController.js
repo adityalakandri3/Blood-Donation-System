@@ -1,10 +1,10 @@
-const  transporter = require("../config/emailConfig");
+const transporter = require("../config/emailConfig");
 const { hashedPassword, matchPassword } = require("../middleware/Auth");
 const sendEmailVerificationOtp = require("../middleware/EmailVerifyOtp");
 const emailVerificationModel = require("../model/OtpModel");
 const User = require("../model/UserModel");
 const jwt = require("jsonwebtoken");
-const bcrypt = require('bcrypt')
+const bcrypt = require("bcrypt");
 
 class UserController {
   //User Create function
@@ -210,9 +210,7 @@ class UserController {
       });
     }
   }
-
   //update password
-
   async updatePassword(req, res) {
     try {
       const { user_id, password } = req.body;
@@ -254,7 +252,7 @@ class UserController {
     }
   }
 
-
+  //reset password
   async resetPasswordLink(req, res) {
     try {
       const { email } = req.body;
@@ -280,7 +278,7 @@ class UserController {
       const token = jwt.sign({ userId: user._id }, secret, {
         expiresIn: "20m",
       });
-      console.log('token',token);
+      console.log("token", token);
       //reset link
       const resetLink = `${process.env.FRONT_END_HOST}/account/reset-password/${user._id}/${token}`;
       console.log(resetLink);
@@ -304,7 +302,7 @@ class UserController {
       });
     }
   }
-//reset password
+  //reset password
   async resetPassword(req, res) {
     try {
       const { password, confirmPassword } = req.body;
