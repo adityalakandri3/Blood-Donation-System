@@ -1,4 +1,4 @@
-const BloodRequestModel = require('../model/BloodRequest');
+const BloodRequestModel = require("../model/BloodRequest");
 
 class BloodRequestController {
   // Create a blood request
@@ -13,9 +13,11 @@ class BloodRequestController {
       });
 
       await bloodRequest.save();
-      res.status(201).json({ message: 'Blood request created successfully', bloodRequest });
+      res
+        .status(201)
+        .json({ message: "Blood request created successfully", bloodRequest });
     } catch (error) {
-      res.status(500).json({ message: 'Error creating blood request', error });
+      res.status(500).json({ message: "Error creating blood request", error });
     }
   }
 
@@ -25,12 +27,12 @@ class BloodRequestController {
       const bloodRequests = await BloodRequestModel.find();
       res.status(200).json({ bloodRequests });
     } catch (error) {
-      res.status(500).json({ message: 'Error fetching blood requests', error });
+      res.status(500).json({ message: "Error fetching blood requests", error });
     }
   }
 
   // Update blood request status
-  async updateBloodRequestStatus(req, res) {
+  async updateBloodRequestStatus(req, res) {s
     try {
       const { id } = req.params;
       const { status } = req.body;
@@ -42,12 +44,12 @@ class BloodRequestController {
       );
 
       if (!bloodRequest) {
-        return res.status(404).json({ message: 'Blood request not found' });
+        return res.status(404).json({ message: "Blood request not found" });
       }
 
-      res.status(200).json({ message: 'Blood request updated', bloodRequest });
+      res.status(200).json({ message: "Blood request updated", bloodRequest });
     } catch (error) {
-      res.status(500).json({ message: 'Error updating blood request', error });
+      res.status(500).json({ message: "Error updating blood request", error });
     }
   }
 
@@ -59,7 +61,9 @@ class BloodRequestController {
 
       res.status(200).json({ bloodRequests });
     } catch (error) {
-      res.status(500).json({ message: 'Error fetching blood requests by status', error });
+      res
+        .status(500)
+        .json({ message: "Error fetching blood requests by status", error });
     }
   }
 }
