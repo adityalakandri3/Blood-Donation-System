@@ -4,35 +4,67 @@ class BloodRequestController {
   // Create a blood request
   async createBloodRequest(req, res) {
     try {
-      const { recipent, bloodType, location } = req.body;
+      const recipient = req.user._id;
+      const { bloodType, location } = req.body;
 
-      const bloodRequest = new BloodRequestModel({
-        recipent,
+      //all fields are required
+      if (!bloodType || !location) {
+        return res.status(400).json({
+          status: false,
+          message: "All fields are required.",
+        });
+      }
+
+      //creating request
+      const bloodRequestData = new BloodRequestModel({
+        recipient,
         bloodType,
         location,
       });
 
-      await bloodRequest.save();
-      res
-        .status(201)
-        .json({ message: "Blood request created successfully", bloodRequest });
-    } catch (error) {
-      res.status(500).json({ message: "Error creating blood request", error });
+      //saving blood request data
+      const bloodRequest = await bloodRequestData.save();
+      if (bloodRequest) {
+        return res.status(200).json({
+          status: true,
+          message: "Blood Request created successfully.",
+          data: bloodRequest,
+        });
+      }
+    } catch (err) {
+      return res.status(400).json({
+        status: false,
+        message: `Something went wrong while creating blood request,${err.message}`,
+      });
     }
   }
 
-  // Get all blood requests
+  // Get all blood request for the one who has created
   async getAllBloodRequests(req, res) {
     try {
-      const bloodRequests = await BloodRequestModel.find();
-      res.status(200).json({ bloodRequests });
+      const userId = req.user._id
+      //fiding user id 
+      const bloodRequests = await BloodRequestModel.find({
+        recipient:userId,
+      });
+      //if found fetch data
+      if (bloodRequests) {
+        return res.status(200).json({
+          status: true,
+          message: "Blood Requests fetched successfully.",
+          data: bloodRequests,
+        });
+      }
     } catch (error) {
-      res.status(500).json({ message: "Error fetching blood requests", error });
+      return res.status(400).json({
+        status: false,
+        message: `Something went wrong while fetching blood requests,${error.message}`,
+      });
     }
   }
 
   // Update blood request status
-  async updateBloodRequestStatus(req, res) {s
+  async updateBloodRequestStatus(req, res) {
     try {
       const { id } = req.params;
       const { status } = req.body;
