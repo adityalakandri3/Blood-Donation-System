@@ -50,11 +50,14 @@ app.use('uploads',express.static(path.join(__dirname,'/uploads')));
 
 
 //Routes
-const UserRoute = require('./app/router/UserRouter')
+const UserRoute = require('./app/router/UsersRouter')
 app.use(UserRoute);
 
 const BloodRequestRoute = require('./app/router/BloodRequestRouter')
 app.use(BloodRequestRoute);
+
+const CampRoute = require('./app/router/CampRouter');
+app.use(CampRoute)
 
 
 //listening port

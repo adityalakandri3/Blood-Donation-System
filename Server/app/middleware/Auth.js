@@ -37,5 +37,17 @@ const AuthCheck = async(req,res,next)=>{
     return next();
 }
 
+//RoleCheck for admin
+const RoleCheck = (role) => {
+    return async (req, res, next) => {
+      if (req.user.role !== role) {
+        return res.status(400).json({
+          status: false,
+          message: "Only admin can perform this operation.",
+        });
+      }
+      next();
+    };
+  };
 
-module.exports = {hashedPassword,matchPassword,AuthCheck}
+module.exports = {hashedPassword,matchPassword,AuthCheck,RoleCheck}
