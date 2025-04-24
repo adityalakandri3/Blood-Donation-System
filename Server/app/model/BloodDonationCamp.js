@@ -42,6 +42,10 @@ const bloodDonationCampSchema = new Schema(
     contactNumber: {
       type: String,
     },
+    image: {
+      type: String,
+      required: true,
+    },
 
     status: {
       type: String,

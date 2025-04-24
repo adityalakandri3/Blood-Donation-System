@@ -251,8 +251,7 @@ class UserController {
       });
     }
   }
-
-  //reset password
+  //reset password link
   async resetPasswordLink(req, res) {
     try {
       const { email } = req.body;
@@ -355,7 +354,6 @@ class UserController {
       });
     }
   }
-
   //dashboard
   async userDashboard(req, res) {
     try {
