@@ -44,5 +44,5 @@ const bloodRequestSchema = new Schema(
   }
 );
 
-const BloodRequestModel = mongoose.model("recipient", bloodRequestSchema);
+const BloodRequestModel = mongoose.model("blood_requests", bloodRequestSchema);
 module.exports = BloodRequestModel;

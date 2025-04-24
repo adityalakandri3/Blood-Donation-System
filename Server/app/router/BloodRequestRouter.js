@@ -1,18 +1,17 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const BloodRequestController = require('../controller/BloodRequest');
-const { AuthCheck } = require('../middleware/Auth');
+const bloodRequestController = require('../controller/BloodRequest');
 
 // Create a blood request
-router.post('/blood-requests',AuthCheck, BloodRequestController.createBloodRequest);
+router.post('/blood-requests', bloodRequestController.createBloodRequest);
 
 // Get all blood requests
-router.get('/get-blood-request', AuthCheck,BloodRequestController.getAllBloodRequests);
+router.get('/blood-requests', bloodRequestController.getAllBloodRequests);
 
 // Update blood request status
-router.put('/blood-requests/:id', BloodRequestController.updateBloodRequestStatus);
+router.put('/blood-requests/:id', bloodRequestController.updateBloodRequestStatus);
 
 // Get blood requests by status
-router.get('/blood-requests/status/:status', BloodRequestController.getBloodRequestsByStatus);
+router.get('/blood-requests/status/:status', bloodRequestController.getBloodRequestsByStatus);
 
 module.exports = router;
