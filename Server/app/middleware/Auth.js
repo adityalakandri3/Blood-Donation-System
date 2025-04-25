@@ -45,7 +45,7 @@ const RoleCheck = (role) => {
       if (req.user.role !== role) {
         return res.status(400).json({
           status: false,
-          message: "Only admin can perform this operation.",
+          message: "Access Denied.You are not eligible to perform this operation.",
         });
       }
       next();

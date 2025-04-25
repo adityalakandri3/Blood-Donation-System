@@ -62,6 +62,10 @@ app.use(CampRoute)
 const RegistrationRoute = require('./app/router/RegistrationRouter');
 app.use(RegistrationRoute);
 
+const DonorRoute = require('./app/router/DonorRouter');
+app.use(DonorRoute);
+
+
 //listening port
 const port = 3006;
 app.listen(port,()=>{

@@ -9,7 +9,7 @@ const bloodRequestSchema = new Schema(
       required: true,
     },
 
-    bloodType: {
+    bloodRequested: {
       type: String,
       enum: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],
       required: true,
