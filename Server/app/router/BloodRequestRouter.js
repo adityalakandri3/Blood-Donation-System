@@ -9,6 +9,7 @@ router.post('/create-blood-request',AuthCheck, RoleCheck('recipient'),BloodReque
 // Get all blood requests
 router.get('/get-blood-request', AuthCheck,BloodRequestController.getAllBloodRequests);
 
+<<<<<<< HEAD
 //get blood request by id
 router.get('/get-blood-request/:id', AuthCheck,BloodRequestController.getAllBloodRequestById);
 
@@ -19,5 +20,12 @@ router.put('/update-blood-request/:id', AuthCheck, RoleCheck('recipient'),BloodR
 router.delete('/delete-blood-request/:id', AuthCheck, RoleCheck('recipient'),BloodRequestController.deleteBloodRequest);
 
 
+=======
+// Update blood request status
+router.put('/blood-requests/:id',AuthCheck, BloodRequestController.updateBloodRequestStatus);
+
+// Get blood requests by status
+router.get('/blood-requests/status/:status',AuthCheck, BloodRequestController.getBloodRequestsByStatus);
+>>>>>>> e4f96f2e10a1ce239242b5a9e065dbe2cb227f34
 
 module.exports = router;

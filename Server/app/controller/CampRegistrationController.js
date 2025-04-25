@@ -78,6 +78,7 @@ class CampRegistrationController {
       if (registrations.length > 0) {
         return res.status(200).json({
           status: true,
+          total: registrations.length,
           message: "Registered camps fetched successfully.",
           data: registrations,
         });
