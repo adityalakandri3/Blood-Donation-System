@@ -65,7 +65,6 @@ class DonorController {
       });
     }
   }
-
   //accept request
   async acceptBloodRequest(req, res) {
     try {

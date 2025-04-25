@@ -4,10 +4,10 @@ const DonorController = require('../controller/DonorController');
 const router = express.Router();
 
 
-
-router.get('/get-blood-request-donor',RoleCheck('donor'),AuthCheck,DonorController.getMatchingRequestForDonor);
-router.get('/get-blood-request-donor/:id',RoleCheck('donor'),AuthCheck,DonorController.getMatchingRequestForDonorById);
-router.put('/accept-blood-request/:id',RoleCheck('donor'),AuthCheck,DonorController.acceptBloodRequest)
+router.all('/*',AuthCheck);
+router.get('/get-blood-request-donor',RoleCheck('donor'),DonorController.getMatchingRequestForDonor);
+router.get('/get-blood-request-donor/:id',RoleCheck('donor'),DonorController.getMatchingRequestForDonorById);
+router.put('/accept-blood-request/:id',RoleCheck('donor'),DonorController.acceptBloodRequest)
 
 
 module.exports = router;

@@ -259,6 +259,7 @@ class CampController {
     }
   }
 
+  //update Registration Status
   async updateRegistrationStatus(req, res) {
     try {
       const { id } = req.params;

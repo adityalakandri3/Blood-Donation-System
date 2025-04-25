@@ -369,6 +369,71 @@ class UserController {
       });
     }
   }
+  //edit User
+  async editUser(req, res) {
+    try {
+      const { id } = req.params;
+      const edit = await User.findById(id);
+      if (!edit) {
+        return res.status(400).json({
+          status: false,
+          message: "User not found.",
+        });
+      }
+      return res.status(200).json({
+        status: true,
+        message: "User fetched successfully.",
+        data: edit,
+      });
+    } catch (error) {
+      return res.status(400).json({
+        status: false,
+        message: `Something went wrong,${error.message}.`,
+      });
+    }
+  }
+  //update User
+  async updateUser(req, res) {
+    try {
+      const { id } = req.params;
+      const { name, password, role, bloodType, location } = req.body;
+      //checking if all the fields are present
+      if (
+        !name ||
+        !password ||
+        !role ||
+        !bloodType ||
+        !location?.state ||
+        !location?.city
+      ) {
+        return res.status(400).json({
+          status: false,
+          message: "All fields are required.",
+        });
+      }
+      //hashing Password
+      const hashPassword = await hashedPassword(password);
+      const updatedData = {
+        name,
+        password: hashPassword,
+        role,
+        bloodType,
+        location,
+      };
+      const update = await User.findByIdAndUpdate(id, updatedData, {
+        new: true,
+      });
+      return res.status(200).json({
+        status: true,
+        message: "User Updated Succesfully.",
+      });
+    } catch (error) {
+      return res.status(400).json({
+        status: false,
+        message: `Something went wrong whie updating user.${error.message}`,
+      });
+    }
+  }
 }
 
 module.exports = new UserController();
