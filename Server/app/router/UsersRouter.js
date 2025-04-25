@@ -1,20 +1,20 @@
 const express = require('express');
-const userController = require('../controller/userController');
+const UserController = require('../controller/UserController');
 const { AuthCheck } = require('../middleware/Auth');
 const router = express.Router();
 
 
 
-router.post('/create-user',userController.createUser)
-router.post('/login-user',userController.loginUser)
-router.post('/verify-otp',userController.verifyOTP);
-router.post('/reset-password-link',userController.resetPasswordLink);
-router.post('/reset-password/:id/:token',userController.resetPassword);
+router.post('/create-user',UserController.createUser)
+router.post('/login-user',UserController.loginUser)
+router.post('/verify-otp',UserController.verifyOTP);
+router.post('/reset-password-link',UserController.resetPasswordLink);
+router.post('/reset-password/:id/:token',UserController.resetPassword);
 
 router.all('/*',AuthCheck);
-router.get('/user-dashboard',userController.userDashboard)
-router.post('/update-password',userController.updatePassword);
-router.get('/edit-user/:id',userController.editUser);
-router.post('/update-user/:id',userController.updateUser);
+router.get('/user-dashboard',UserController.userDashboard)
+router.post('/update-password',UserController.updatePassword);
+router.get('/edit-user/:id',UserController.editUser);
+router.post('/update-user/:id',UserController.updateUser);
 
 module.exports = router;
