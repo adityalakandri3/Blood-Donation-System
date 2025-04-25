@@ -240,7 +240,6 @@ class CampController {
       });
     }
   }
-
   //per user
   async getRegistrationsByUser(req, res) {
     try {
@@ -270,7 +269,6 @@ class CampController {
     }
   }
 
-  //update Registration Status
   // Update Registration Status
   async updateRegistrationStatus(req, res) {
     try {
