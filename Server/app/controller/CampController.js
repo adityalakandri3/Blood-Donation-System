@@ -102,10 +102,11 @@ class CampController {
     }
   }
   //update camp
-  async updateCamp(req,res){
+  async updateCamp(req, res) {
     try {
-      const {id}= req.params;
-      const { name, description, date, location, contactNumber ,status} = req.body;
+      const { id } = req.params;
+      const { name, description, date, location, contactNumber, status } =
+        req.body;
 
       //All fields are required
       if (
@@ -115,7 +116,8 @@ class CampController {
         !location?.state ||
         !location?.city ||
         !location?.address ||
-        !contactNumber ||!status
+        !contactNumber ||
+        !status
       ) {
         return res.status(400).json({
           status: false,
@@ -124,44 +126,53 @@ class CampController {
       }
       //get camp to delete image
       const getCamp = await BloodDonationCampModel.findById(id);
-      if(!getCamp){
+      if (!getCamp) {
         return res.status(400).json({
-          status:false,
-          message:'Camp not found'
-        })
+          status: false,
+          message: "Camp not found",
+        });
       }
       //deleting image
-      if(getCamp.image){
-        fs.unlink(getCamp.image,(err)=>{
-          if(err){
-            console.log('Error deleting image.')
-          }else{
-            console.log('Image deleted.')
+      if (getCamp.image) {
+        fs.unlink(getCamp.image, (err) => {
+          if (err) {
+            console.log("Error deleting image.");
+          } else {
+            console.log("Image deleted.");
           }
         });
       }
       //updated data
       const updatedData = {
-        name, description, date, location, contactNumber,status
-      }
+        name,
+        description,
+        date,
+        location,
+        contactNumber,
+        status,
+      };
       //updated image
-      if(req.file){
-        updatedData.image = req.file.path
+      if (req.file) {
+        updatedData.image = req.file.path;
       }
 
-      const update = await BloodDonationCampModel.findByIdAndUpdate(id,updatedData,{new:true})
-      if(update){
+      const update = await BloodDonationCampModel.findByIdAndUpdate(
+        id,
+        updatedData,
+        { new: true }
+      );
+      if (update) {
         return res.status(200).json({
-          status:true,
-          message:'Camp updated Successfully.',
-          data:update
-        })
+          status: true,
+          message: "Camp updated Successfully.",
+          data: update,
+        });
       }
     } catch (error) {
-       return res.status(400).json({
-          status:false,
-          message:`Something went wrong while updating data.${error.message}`
-        })
+      return res.status(400).json({
+        status: false,
+        message: `Something went wrong while updating data.${error.message}`,
+      });
     }
   }
   //delete camp
@@ -204,19 +215,19 @@ class CampController {
   async getCampRegistrations(req, res) {
     try {
       const { id } = req.params;
-  
+
       // Fetch registrations for the camp
       const registrations = await Registration.find({ camp: id })
-        .populate("user", "name email") 
-        .populate("camp", "name date"); 
-  
+        .populate("user", "name email")
+        .populate("camp", "name date");
+
       if (!registrations.length) {
         return res.status(404).json({
           status: false,
           message: "No registrations found for this camp.",
         });
       }
-  
+
       return res.status(200).json({
         status: true,
         message: "Registrations fetched successfully.",
@@ -233,19 +244,19 @@ class CampController {
   //per user
   async getRegistrationsByUser(req, res) {
     try {
-      const {id} = req.params; 
-      
+      const { id } = req.params;
+
       const registrations = await Registration.find({ user: id })
         .populate("camp", "name date")
         .populate("user", "name email");
-  
+
       if (!registrations.length) {
         return res.status(404).json({
           status: false,
           message: "No registrations found for this user.",
         });
       }
-  
+
       return res.status(200).json({
         status: true,
         message: "Registrations fetched successfully.",
@@ -260,11 +271,21 @@ class CampController {
   }
 
   //update Registration Status
+  // Update Registration Status
   async updateRegistrationStatus(req, res) {
     try {
       const { id } = req.params;
-  
-      // Find the registration to update
+      const { status } = req.body;
+
+      //status can only be changed to donated
+      if (status !== "donated") {
+        return res.status(400).json({
+          status: false,
+          message: "The status can only be updated to 'donated'.",
+        });
+      }
+
+      // Find registration to update
       const registration = await Registration.findById(id);
       if (!registration) {
         return res.status(400).json({
@@ -272,32 +293,32 @@ class CampController {
           message: "Registration not found.",
         });
       }
-  
-      // Check if the registration is already donated or cancelled
+
+      // Check if the status is already donated
       if (registration.status === "donated") {
         return res.status(400).json({
           status: false,
-          message: "User has already donated.",
+          message: "Status is already 'donated'. Cannot change again.",
         });
       }
-      
-      if (registration.status === "cancelled") {
+
+      // Check if registration status is registered  before updating to donated
+      if (registration.status !== "registered") {
         return res.status(400).json({
           status: false,
-          message: "Cannot update status. Registration is cancelled.",
+          message: `Cannot update. Current status is '${registration.status}'. Only 'registered' statuses can be updated to 'donated'.`,
         });
       }
-  
-      // Update the status to donated
-      registration.status = 'donated';
+
+      // Update the status to 'donated'
+      registration.status = "donated";
       await registration.save();
-  
+
       return res.status(200).json({
         status: true,
-        message: "Registration status updated to donated.",
+        message: "Registration status successfully updated to donated.",
         data: registration,
       });
-  
     } catch (error) {
       return res.status(500).json({
         status: false,
@@ -305,7 +326,6 @@ class CampController {
       });
     }
   }
-  
 }
 
 module.exports = new CampController();
