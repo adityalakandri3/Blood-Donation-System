@@ -1,16 +1,14 @@
 import React from 'react';
-import Home from './components/Home';
+import UserSignUp from './components/UserSignUp';
+
+
 
 const App = () => {
   return (
-
     <>
-      <Home />
+<UserSignUp/>
     </>
   );
 };
-
-  
-
 
 export default App;
