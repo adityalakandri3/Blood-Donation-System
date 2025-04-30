@@ -5,14 +5,16 @@ const emailVerificationModel = require("../model/OtpModel");
 const User = require("../model/UserModel");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const createToken = require("../helper/createTokenforAdmin");
 
 class UserController {
   //User Create function
   async createUser(req, res) {
+    // console.log(req.body)
     try {
       const { name, email, password, role, bloodType, location } = req.body;
-
-      //checking if all the fields are present
+  
+      // Checking if all the fields are present
       if (
         !name ||
         !email ||
@@ -27,11 +29,14 @@ class UserController {
           message: "All fields are required.",
         });
       }
-
-      //hashing Password
+  
+      // Hashing password
       const hashPassword = await hashedPassword(password);
-
-      //saving the data in the database
+  
+      // Setting is_verified to true for admin, false otherwise
+      const is_verified = role === "admin" ? true : false;
+  
+      // Saving the data in the database
       const data = new User({
         name,
         email,
@@ -39,25 +44,37 @@ class UserController {
         role,
         bloodType,
         location,
+        is_verified,
       });
+  
       const user = await data.save();
-
-      sendEmailVerificationOtp(req, user);
-      //Response for saving the data
-      if (user) {
-        return res.status(200).json({
-          status: true,
-          message: "User registered and OTP sent successfully.",
-          data: user,
-        });
+  
+      // Send OTP only if not admin
+      if (role !== "admin") {
+        sendEmailVerificationOtp(req, user);
       }
+  
+      if (role === "admin") {
+        // Redirect to login page after admin registration
+        return res.redirect('/admin/login');
+      }
+  
+      return res.status(200).json({
+        status: true,
+        message:
+          role === "admin"
+            ? "Admin registered successfully. Please login."
+            : "User registered and OTP sent successfully.",
+        data: user,
+      });
     } catch (error) {
       return res.status(400).json({
         status: false,
-        message: `Something went wrong while creating user:${error.message}`,
-      });
+        message: `Something went wrong while creating user: ${error.message}`,
+      });s
     }
   }
+  
   //Verify OTP
   async verifyOTP(req, res) {
     try {
@@ -175,7 +192,26 @@ class UserController {
           message: "Incorrect Password.",
         });
       }
+      //for admin
+      if(user.role==="admin"){
+        const tokendata = await createToken({
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+          role: user.role,
+          bloodType: user.bloodType,
+          location: user.location,
+        });
+        if (tokendata) {
+          res.cookie("userToken", tokendata);
+          console.log('Admin logged in')
+          return res.redirect("/");
+        } else {
+          console.log("login failed");
+          return res.redirect("/admin/login");
+        }
 
+      }
       //create token
       const token = jwt.sign(
         {

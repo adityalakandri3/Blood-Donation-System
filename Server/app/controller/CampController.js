@@ -268,7 +268,6 @@ class CampController {
       });
     }
   }
-
   // Update Registration Status
   async updateRegistrationStatus(req, res) {
     try {

@@ -16,8 +16,6 @@ const matchPassword = async(password,existingPassword)=>{
 
 const AuthCheck = async(req,res,next)=>{
     let token = req.body.token||req.query.token||req.headers['x-access-token']||req.headers['authorization']
-
-
    
     //checking if token is there
     if(!token){

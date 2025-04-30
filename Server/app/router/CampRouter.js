@@ -10,11 +10,10 @@ router.get("/get-camp", AuthCheck, CampController.getAllCamp);
 //campid
 router.get("/get-camp/:id", AuthCheck, CampController.getCampById);
 
-router.all("/*", AuthCheck);
 //create camp
 router.post(
   "/admin/create-camp",
-  RoleCheck("admin"),
+  RoleCheck("admin"),AuthCheck,
   campImage.single("image"),
   CampController.createCamp
 );
@@ -22,28 +21,28 @@ router.post(
 //camp id
 router.post(
   "/admin/update-camp/:id",
-  RoleCheck("admin"),
+  RoleCheck("admin"),AuthCheck,
   campImage.single("image"),
   CampController.updateCamp
 );
 //camp id
 router.delete(
   "/admin/delete-camp/:id",
-  RoleCheck("admin"),
+  RoleCheck("admin"),AuthCheck,
   CampController.deleteCamp
 );
 
 //camp id
 router.get(
   "/admin/get-registrations/:id",
-  RoleCheck("admin"),
+  RoleCheck("admin"),AuthCheck,
   CampController.getCampRegistrations
 );
 
 //user id
 router.get(
   "/admin/user-registration/:id",
-  RoleCheck("admin"),
+  RoleCheck("admin"),AuthCheck,
   CampController.getRegistrationsByUser
 );
 
@@ -51,7 +50,7 @@ router.get(
 //registration id
 router.put(
   "/admin/update-registration/:id",
-  RoleCheck("admin"),
+  RoleCheck("admin"),AuthCheck,
   CampController.updateRegistrationStatus
 );
 

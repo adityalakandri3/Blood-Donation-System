@@ -4,9 +4,8 @@ const { AuthCheck } = require('../middleware/Auth');
 const router = express.Router()
 
 
-router.all('/*',AuthCheck);
-router.post('/camp-register/:id',CampRegistrationController.campRegister)
-router.get('/my-registrations',CampRegistrationController.myRegistrations)
-router.put('/my-registrations/cancel-registration/:id',CampRegistrationController.cancelRegistration)
+router.post('/camp-register/:id',AuthCheck,CampRegistrationController.campRegister)
+router.get('/my-registrations',AuthCheck,CampRegistrationController.myRegistrations)
+router.put('/my-registrations/cancel-registration/:id',AuthCheck,CampRegistrationController.cancelRegistration)
 
 module.exports = router

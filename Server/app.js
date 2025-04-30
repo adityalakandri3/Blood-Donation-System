@@ -43,7 +43,8 @@ app.use(express.json({
 app.use(express.urlencoded({extended:true}))
 
 //static folder
-app.use(express.static('public'))
+// app.use(express.static('public'))
+app.use(express.static(path.join(__dirname, 'public')));
 app.use('/uploads',express.static('uploads'))
 app.use('uploads',express.static(path.join(__dirname,'/uploads')));
 
@@ -65,6 +66,8 @@ app.use(RegistrationRoute);
 const DonorRoute = require('./app/router/DonorRouter');
 app.use(DonorRoute);
 
+const AdminRoute = require('./app/router/AdminRouter');
+app.use(AdminRoute);
 
 //listening port
 const port = 3006;
