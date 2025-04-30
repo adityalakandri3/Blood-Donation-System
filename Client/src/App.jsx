@@ -1,11 +1,14 @@
-import React from 'react'
+import React from 'react';
+import UserSignUp from './components/UserSignUp';
+
+
 
 const App = () => {
   return (
-    <div>
-      
-    </div>
-  )
-}
+    <>
+<UserSignUp/>
+    </>
+  );
+};
 
-export default App
+export default App;
