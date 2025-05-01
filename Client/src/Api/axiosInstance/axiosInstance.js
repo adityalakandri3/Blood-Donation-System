@@ -1,7 +1,9 @@
 import axios from 'axios'
-import { baseURL } from '../endPoints/endPoints'
+import { baseURL } from '../endPoints/endPoint'
+
+
 export const axiosInstance = axios.create({
-  baseURL: baseURL,
+  baseURL,
 })
 
 // Add a request interceptor

@@ -1,12 +1,38 @@
+// import { ToastContainer } from "react-toastify";
 import React from "react";
-import UserSignUp from "./components/UserSignUp";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Home from "./components/Home.jsx";
+import Root from "./layouts/Root.jsx";
+import UserSignUp from "./components/UserSignUp.jsx";
+import UserSignIn from "./components/UserSignIn.jsx";
 
-const App = () => {
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Root />,
+    children: [
+      {
+        path: "/",
+        element: <Home />,
+      },
+      {
+        path: "/signup",
+        element: <UserSignUp />,
+      },
+      {
+        path: "/signin",
+        element: <UserSignIn/>,
+      },
+    ],
+  },
+]);
+
+function App() {
   return (
     <>
-      <UserSignUp />
+      <RouterProvider router={router} />
     </>
   );
-};
+}
 
 export default App;

@@ -1,4 +1,4 @@
-export const baseURL = "http://localhost:3006"; // your backend URL
+export const baseURL = "http://localhost:3006"; 
 
 export const endPoints = {
   user: {
