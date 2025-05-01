@@ -5,6 +5,9 @@ import Home from "./components/Home.jsx";
 import Root from "./layouts/Root.jsx";
 import UserSignUp from "./components/UserSignUp.jsx";
 import UserSignIn from "./components/UserSignIn.jsx";
+import OtpVerify from "./components/OtpVerify.jsx";
+import HomePage from "./pages/HomePage.jsx";
+
 
 const router = createBrowserRouter([
   {
@@ -22,6 +25,14 @@ const router = createBrowserRouter([
       {
         path: "/signin",
         element: <UserSignIn/>,
+      },
+      {
+        path: "/otpverify",
+        element: <OtpVerify/>,
+      },
+      {
+        path: "/homepage",
+        element: <HomePage/>
       },
     ],
   },
