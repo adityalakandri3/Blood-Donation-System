@@ -1,12 +1,10 @@
-import React from 'react';
-import UserSignUp from './components/UserSignUp';
-
-
+import React from "react";
+import UserSignUp from "./components/UserSignUp";
 
 const App = () => {
   return (
     <>
-<UserSignUp/>
+      <UserSignUp />
     </>
   );
 };

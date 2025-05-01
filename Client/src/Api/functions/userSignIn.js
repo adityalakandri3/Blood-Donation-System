@@ -6,7 +6,7 @@ export const signin = async (input) => {
     const { data } = await axiosInstance.post(endPoints.user.login, input);
     return data;
   } catch (error) {
-    console.error("Signup error:", error.response?.data || error.message); // optional log
+    console.error("Signup error:", error.response?.data || error.message); 
     throw error;
   }
 };

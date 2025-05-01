@@ -1,4 +1,5 @@
 class AdminController {
+  //check admin auth
   async CheckAuth(req, res, next) {
     console.log(req.user);
     try {
@@ -11,6 +12,7 @@ class AdminController {
       console.log(err);
     }
   }
+  //register view
   async registerView(req, res) {
     try {
       return res.render("register", {
@@ -23,6 +25,7 @@ class AdminController {
       });
     }
   }
+  //login view
   async loginView(req, res) {
     try {
       return res.render("login", {
@@ -35,6 +38,7 @@ class AdminController {
       });
     }
   }
+  //dashboard
   async dashboard(req,res){
     try {
         res.render("home", {
@@ -45,6 +49,26 @@ class AdminController {
         console.log(error.message);
       }
   
+  }
+  //logout admin
+  async logout(req, res) {
+    try {
+      res.clearCookie("userToken"),
+       res.redirect("/admin/login");
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+  //camp view
+  async campView (req,res){
+    try {
+      return res.render('buttons',{
+        title:'buttons',
+        user:req.user
+      })
+    } catch (error) {
+      console.log(error)
+    }
   }
 }
 
