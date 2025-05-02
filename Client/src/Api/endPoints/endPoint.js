@@ -12,4 +12,12 @@ export const endPoints = {
     editUser: (id) => `/edit-user/${id}`,
     updateUser: (id) => `/update-user/${id}`,
   },
+
+  blood_requests: {
+    create: "/create-blood-request",
+    getAll: "/get-blood-request",
+    getById: (id) => `/get-blood-request/${id}`,
+    update: (id) => `/update-blood-request/${id}`,
+    delete: (id) => `/delete-blood-request/${id}`,
+  },
 };

@@ -23,7 +23,7 @@ const navigation = [
 	{ name: "Host Blood Drive", href: "/host-blood-drive" },
 	{ name: "Donate Money", href: "https://donorbox.org/donate-money-11" },
 	{ name: "Help Needed", href: "/contact" },
-	{ name: "Need Blood", href: "/need-blood", secondLast: true },
+	{ name: "Need Blood", href: "/bloodrequest", secondLast: true },
 	{ name: "Donate Blood", href: "/donate-blood", last: true },
 ];
 
