@@ -13,7 +13,7 @@ class UserController {
     // console.log(req.body)
     try {
       const { name, email, password, role, bloodType, location } = req.body;
-  
+
       // Checking if all the fields are present
       if (
         !name ||
@@ -29,13 +29,13 @@ class UserController {
           message: "All fields are required.",
         });
       }
-  
+
       // Hashing password
       const hashPassword = await hashedPassword(password);
-  
+
       // Setting is_verified to true for admin, false otherwise
       const is_verified = role === "admin" ? true : false;
-  
+
       // Saving the data in the database
       const data = new User({
         name,
@@ -46,19 +46,19 @@ class UserController {
         location,
         is_verified,
       });
-  
+
       const user = await data.save();
-  
+
       // Send OTP only if not admin
       if (role !== "admin") {
         sendEmailVerificationOtp(req, user);
       }
-  
+
       if (role === "admin") {
         // Redirect to login page after admin registration
-        return res.redirect('/admin/login');
+        return res.redirect("/admin/login");
       }
-  
+
       return res.status(200).json({
         status: true,
         message:
@@ -71,10 +71,10 @@ class UserController {
       return res.status(400).json({
         status: false,
         message: `Something went wrong while creating user: ${error.message}`,
-      });s
+      });
+      s;
     }
   }
-  
   //Verify OTP
   async verifyOTP(req, res) {
     try {
@@ -155,7 +155,6 @@ class UserController {
       });
     }
   }
-
   //User Login function
   async loginUser(req, res) {
     try {
@@ -194,7 +193,7 @@ class UserController {
         });
       }
       //for admin
-      if(user.role==="admin"){
+      if (user.role === "admin") {
         const tokendata = await createToken({
           _id: user._id,
           name: user.name,
@@ -202,16 +201,16 @@ class UserController {
           role: user.role,
           bloodType: user.bloodType,
           location: user.location,
+          is_verified: user.is_verified,
         });
         if (tokendata) {
           res.cookie("userToken", tokendata);
-          console.log('Admin logged in')
+          console.log("Admin logged in");
           return res.redirect("/");
         } else {
           console.log("login failed");
           return res.redirect("/admin/login");
         }
-
       }
       //create token
       const token = jwt.sign(
@@ -235,6 +234,7 @@ class UserController {
           name: user.name,
           email: user.email,
           role: user.role,
+          is_verified: user.is_verified,
           bloodType: user.bloodType,
           location: user.location,
         },
@@ -292,14 +292,13 @@ class UserController {
   async resetPasswordLink(req, res) {
     try {
       const { email } = req.body;
-      //email is required
+
       if (!email) {
         return res.status(400).json({
           status: false,
           message: "Email is required.",
         });
       }
-      //check if the user exist or not
 
       const user = await User.findOne({ email });
       if (!user) {
@@ -309,28 +308,36 @@ class UserController {
         });
       }
 
-      //generating token for resetPassword
       const secret = user._id + process.env.JWT_SECRET_KEY;
       const token = jwt.sign({ userId: user._id }, secret, {
         expiresIn: "20m",
       });
-      console.log("token", token);
-      //reset link
-      const resetLink = `${process.env.FRONT_END_HOST}/account/reset-password/${user._id}/${token}`;
-      console.log(resetLink);
 
-      //send mail
+      let resetLink;
+
+      if (user.role === "admin") {
+        resetLink = `${process.env.ADMIN_HOST}/account/reset-password/${user._id}/${token}`;
+      } else {
+        resetLink = `${process.env.FRONT_END_HOST}/account/reset-password/${user._id}/${token}`;
+      }
+
+      console.log("Reset Link:", resetLink);
+
       await transporter.sendMail({
         from: process.env.EMAIL_HOST,
         to: user.email,
         subject: "Password Reset Link",
-        html: `<h5> Hello, ${user.name},</h5><h5> Please <a>${resetLink}</a> Click here to reset your password.</h5> `,
+        html: `<h5>Hello, ${user.name},</h5><h5>Please <a href="${resetLink}">Click here</a> to reset your password.</h5>`,
       });
 
-      return res.status(200).json({
-        status: true,
-        message: "Email to reset password has been sent successfully.",
-      });
+      if (user.role === "admin") {
+        return res.redirect("/admin/login");
+      } else {
+        return res.status(200).json({
+          status: true,
+          message: "Email to reset password has been sent successfully.",
+        });
+      }
     } catch (error) {
       return res.status(400).json({
         status: false,
@@ -352,11 +359,11 @@ class UserController {
         });
       }
 
-      //validate token
+      // Validate token
       const newSecret = user._id + process.env.JWT_SECRET_KEY;
       jwt.verify(token, newSecret);
 
-      //both fields are required
+      // Both fields are required
       if (!password || !confirmPassword) {
         return res.status(400).json({
           status: false,
@@ -367,27 +374,32 @@ class UserController {
       if (password !== confirmPassword) {
         return res.status(400).json({
           status: false,
-          message: "Password and Confirm Password doesn't match. ",
+          message: "Password and Confirm Password don't match.",
         });
       }
 
-      //Generate salt
+      // Generate salt and hash password
       const salt = await bcrypt.genSalt(10);
       const newHashPassword = await bcrypt.hash(password, salt);
 
-      //update password
+      // Update password
       await User.findByIdAndUpdate(user._id, {
         $set: { password: newHashPassword },
       });
 
-      return res.status(200).json({
-        status: true,
-        message: "Password reset successful.",
-      });
+      // Redirect based on role
+      if (user.role === "admin") {
+        return res.redirect("/admin/login");
+      } else {
+        return res.status(200).json({
+          status: true,
+          message: "Password reset successful.",
+        });
+      }
     } catch (error) {
       return res.status(400).json({
         status: false,
-        message: `Unable to reset password.${error.message}`,
+        message: `Unable to reset password: ${error.message}`,
       });
     }
   }
