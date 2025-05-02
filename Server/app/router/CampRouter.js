@@ -48,16 +48,18 @@ router.get(
 
 //user id
 router.get(
-  "/admin/user-registration/:id",
-  RoleCheck("admin"),AuthCheck,
-  CampController.getRegistrationsByUser
+  '/admin/user-registration/:userId/:campId',
+  AdminAuthCheck,
+  RoleCheck("admin"),
+  CampController.getRegistrationsByUserAndCamp
 );
 
 //change status
 //registration id
-router.put(
-  "/admin/update-registration/:id",
-  RoleCheck("admin"),AuthCheck,
+router.post(
+  "/admin/update-registration/:userId/:campId",
+  AdminAuthCheck,
+  RoleCheck("admin"),
   CampController.updateRegistrationStatus
 );
 

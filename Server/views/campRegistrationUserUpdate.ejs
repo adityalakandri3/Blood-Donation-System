@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Update Registration Status</title>
+    <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" />
+    <link href="/css/sb-admin-2.min.css" rel="stylesheet" />
+  </head>
+  <body id="page-top">
+    <div id="wrapper">
+      <%- include('./layout/sidebar.ejs') %>
+
+      <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+          <%- include('./layout/topbar.ejs') %>
+
+          <div class="container-fluid">
+            <h1 class="h3 mb-4 text-gray-800">Update Registration Status</h1>
+
+            <form action="/admin/update-registration/<%= data.user._id%>/<%= data.camp._id%>" method="POST">
+              <div class="form-group">
+                <label>User Name</label>
+                <input type="text" class="form-control" value="<%= data.user.name %>" disabled />
+              </div>
+
+              <div class="form-group">
+                <label>User Email</label>
+                <input type="text" class="form-control" value="<%= data.user.email %>" disabled />
+              </div>
+
+              <div class="form-group">
+                <label>Blood Type</label>
+                <input type="text" class="form-control" value="<%= data.user.bloodType %>" disabled />
+              </div>
+
+              <div class="form-group">
+                <label>Camp Name</label>
+                <input type="text" class="form-control" value="<%= data.camp.name %>" disabled />
+              </div>
+
+              <div class="form-group">
+                <label>Camp Date</label>
+                <input type="text" class="form-control" value="<%= new Date(data.camp.date).toDateString() %>" disabled />
+              </div>
+
+              <div class="form-group">
+                <label>Status</label>
+                <select name="status" class="form-control" <%= data.status === 'donated' ? 'disabled' : '' %>>
+                  <% if (data.status === 'registered') { %>
+                    <option value="registered">Registered</option>
+                    <option value="donated">Donated</option>
+                  <% } else { %>
+                    <option value="donated" selected>Donated</option>
+                  <% } %>
+                </select>
+              </div>
+
+              <% if (data.status !== 'donated') { %>
+                <button type="submit" class="btn btn-primary">Update Status</button>
+              <% } else { %>
+                <div class="alert alert-info">This registration is already marked as donated.</div>
+              <% } %>
+            </form>
+          </div>
+        </div>
+
+        <%- include('./layout/footer.ejs') %>
+      </div>
+    </div>
+
+    <a class="scroll-to-top rounded" href="#page-top"><i class="fas fa-angle-up"></i></a>
+    <%- include('./layout/logout.ejs') %>
+
+    <script src="/vendor/jquery/jquery.min.js"></script>
+    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="/js/sb-admin-2.min.js"></script>
+  </body>
+</html>

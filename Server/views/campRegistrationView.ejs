@@ -16,18 +16,17 @@
 
           <div class="container-fluid">
             <!-- Camp Details Card -->
-            <% if (camp.length > 0) { %>
-              <% const camp = data[0].camp; %>
-              <div class="card shadow mb-4">
-                <div class="card-body">
-                  <h4 class="card-title"><strong><%= camp.name %></strong></h4>
-                  <% if (camp.organizer) { %>
-                    <p><strong>Organizer:</strong> <%= camp.organizer.name %> (<%= camp.organizer.email %>)</p>
-                  <% } %>
-                  <p><strong>Date:</strong> <%= new Date(camp.date).toDateString() %></p>
-                </div>
+            <div class="card shadow mb-4">
+              <div class="card-body">
+                <h4 class="card-title"><strong><%= camp.name %></strong></h4>
+                <% if (camp.organizer) { %>
+                  <p><strong>Organizer:</strong> <%= camp.organizer.name %> (<%= camp.organizer.email %>)</p>
+                <% } %>
+                <p><strong>Date:</strong> <%= new Date(camp.date).toDateString() %></p>
               </div>
+            </div>
 
+            <% if (registrations.length > 0) { %>
               <!-- Registration Table -->
               <div class="card shadow mb-4">
                 <div class="card-header py-3">
@@ -41,16 +40,20 @@
                           <th>#</th>
                           <th>Name</th>
                           <th>Email</th>
+                          <th>BloodType</th>
                           <th>Status</th>
+                          <th>Action</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <% data.forEach((reg, index) => { %>
+                        <% registrations.forEach((reg, index) => { %>
                           <tr>
                             <td><%= index + 1 %></td>
                             <td><%= reg.user.name %></td>
                             <td><%= reg.user.email %></td>
+                            <td><%= reg.user.bloodType %></td>
                             <td><%= reg.status.charAt(0).toUpperCase() + reg.status.slice(1) %></td>
+                            <td><a href='/admin/user-registration/<%=reg.user._id%>/<%=reg.camp._id%>'class="btn btn-danger" >Edit </a></td>
                           </tr>
                         <% }) %>
                       </tbody>
@@ -59,18 +62,9 @@
                 </div>
               </div>
             <% } else { %>
-              <!-- If no registrations, show only camp details -->
-              <div class="card shadow mb-4">
-                <div class="card-body">
-                  <h4 class="card-title"><strong><%= camp.name %></strong></h4>
-                  <% if (camp.organizer) { %>
-                    <p><strong>Organizer:</strong> <%= camp.organizer.name %> (<%= camp.organizer.email %>)</p>
-                  <% } %>
-                  <p><strong>Date:</strong> <%= new Date(camp.date).toDateString() %></p>
-                  <div class="alert alert-info" role="alert">
-                    No registrations found for this camp.
-                  </div>
-                </div>
+              <!-- No Registrations Message -->
+              <div class="alert alert-info" role="alert">
+                No registrations found for this camp.
               </div>
             <% } %>
           </div>

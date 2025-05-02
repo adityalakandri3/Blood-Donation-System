@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 
 const AdminAuthCheck = (req, res, next) => {
   const token = req.cookies?.userToken;
-    console.log(token);
+    // console.log(token);
   if (!token) {
     req.user = null;
     return next();

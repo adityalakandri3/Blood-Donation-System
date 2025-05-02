@@ -42,8 +42,8 @@ class CampController {
       }
       //save data and return response
       const camp = await data.save();
-      if(camp){
-        res.redirect('/admin/camps')
+      if (camp) {
+        res.redirect("/admin/camps");
       }
     } catch (error) {
       //catching error if any
@@ -195,7 +195,7 @@ class CampController {
       //delete camp
       await BloodDonationCampModel.findByIdAndDelete(id);
 
-      return res.redirect('/admin/camps')
+      return res.redirect("/admin/camps");
     } catch (error) {
       return res.status(400).json({
         status: false,
@@ -206,81 +206,97 @@ class CampController {
   //get all registered users
   async getCampRegistrations(req, res) {
     try {
-        const { id } = req.params;
-
-        // Fetch registrations for the camp
-        const registrations = await Registration.find({ camp: id, status: "registered" }) 
-            .populate("user", "name email")
-            .populate({
-                path: "camp",
-                select: "name date",
-                populate: {
-                    path: "organizer", // Assuming 'organizer' is a reference to the 'User' model
-                    select: "name email" // You can choose to display any fields of the organizer here
-                }
-            });
-
-        // Fetch camp details
-        const camp = await BloodDonationCampModel.findById(id).populate("organizer", "name email");
-
-        if (!camp) {
-            return res.status(404).json({
-                status: false,
-                message: "Camp not found.",
-            });
-        }
-
-        // If no registrations found, you still want to display the camp details
-        return res.render('campRegistrationView', {
-            user: req.user,
-            camp: camp, // Passing camp details separately
-            registrations: registrations // Passing registrations
-        });
-
-    } catch (error) {
-        return res.status(400).json({
-            status: false,
-            message: `Failed to fetch registrations: ${error.message}`,
-        });
-    }
-}
-
-
-  //per user
-  async getRegistrationsByUser(req, res) {
-    try {
       const { id } = req.params;
 
-      const registrations = await Registration.find({ user: id })
-        .populate("camp", "name date")
-        .populate("user", "name email");
+      // Fetch registrations for the camp
+      const registrations = await Registration.find({
+        camp: id,
+        status: { $in: ["registered", "donated"] },
+      })
+        .populate("user", "name email bloodType")
+        .populate({
+          path: "camp",
+          select: "name date",
+          populate: {
+            path: "organizer",
+            select: "name email",
+          },
+        });
+
+      // Fetch camp details
+      const camp = await BloodDonationCampModel.findById(id).populate(
+        "organizer",
+        "name email"
+      );
+
+      if (!camp) {
+        return res.status(404).json({
+          status: false,
+          message: "Camp not found.",
+        });
+      }
+
+      // If no registrations found, you still want to display the camp details
+      return res.render("campRegistrationView", {
+        user: req.user,
+        camp: camp, // Passing camp details separately
+        registrations: registrations, // Passing registrations
+      });
+      //   return res.status(200).json({
+      //     status: true,
+      //     message: "Camp  found.",
+      //     data:registrations,
+      // });
+    } catch (error) {
+      return res.status(400).json({
+        status: false,
+        message: `Failed to fetch registrations: ${error.message}`,
+      });
+    }
+  }
+
+  //per user
+  async getRegistrationsByUserAndCamp(req, res) {
+    try {
+      const { userId, campId } = req.params;
+
+      const registrations = await Registration.find({
+        user: userId,
+        camp: campId,
+      })
+        .populate("camp", "name date ")
+        .populate("user", "name email bloodType");
 
       if (!registrations.length) {
         return res.status(404).json({
           status: false,
-          message: "No registrations found for this user.",
+          message: "No registration found for this user in this camp.",
         });
       }
-
-      return res.status(200).json({
-        status: true,
-        message: "Registrations fetched successfully.",
-        data: registrations,
+      return res.render("campRegistrationUserUpdate", {
+        user: req.user,
+        data: registrations[0],
       });
+      // return res.status(200).json({
+      //   status: true,
+      //   message: "Registration found.",
+      //   data: registrations,
+      // });
     } catch (error) {
-      return res.status(500).json({
+      return res.status(400).json({
         status: false,
-        message: `Error fetching registrations: ${error.message}`,
+        message: `Error fetching registration: ${error.message}`,
       });
     }
   }
+
   // Update Registration Status
   async updateRegistrationStatus(req, res) {
     try {
-      const { id } = req.params;
+      const { userId, campId } = req.params;
       const { status } = req.body;
 
-      //status can only be changed to donated
+      // Only allow update to 'donated'
       if (status !== "donated") {
         return res.status(400).json({
           status: false,
@@ -288,16 +304,21 @@ class CampController {
         });
       }
 
-      // Find registration to update
-      const registration = await Registration.findById(id);
+      // Find the registration by user and camp
+      const registration = await Registration.findOne({
+        user: userId,
+        camp: campId,
+      });
+      // console.log("update",userId,campId)
+
       if (!registration) {
-        return res.status(400).json({
+        return res.status(404).json({
           status: false,
-          message: "Registration not found.",
+          message: "Registration not found for the given user and camp.",
         });
       }
 
-      // Check if the status is already donated
+      // Prevent redundant or invalid status changes
       if (registration.status === "donated") {
         return res.status(400).json({
           status: false,
@@ -305,7 +326,6 @@ class CampController {
         });
       }
 
-      // Check if registration status is registered  before updating to donated
       if (registration.status !== "registered") {
         return res.status(400).json({
           status: false,
@@ -313,15 +333,15 @@ class CampController {
         });
       }
 
-      // Update the status to 'donated'
+      // Perform the update
       registration.status = "donated";
       await registration.save();
-
-      return res.status(200).json({
-        status: true,
-        message: "Registration status successfully updated to donated.",
-        data: registration,
-      });
+      return res.redirect(`/admin/get-registrations/${campId}`);
+      // return res.status(200).json({
+      //   status: true,
+      //   message: "Registration status successfully updated to donated.",
+      //   data: registration,
+      // });
     } catch (error) {
       return res.status(500).json({
         status: false,
