@@ -155,6 +155,7 @@ class UserController {
       });
     }
   }
+
   //User Login function
   async loginUser(req, res) {
     try {

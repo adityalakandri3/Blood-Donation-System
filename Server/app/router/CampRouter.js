@@ -2,6 +2,8 @@ const express = require("express");
 const { RoleCheck, AuthCheck } = require("../middleware/Auth");
 const CampController = require("../controller/CampController");
 const campImage = require("../helper/campImage");
+const AdminAuthCheck = require("../middleware/AdminAuthCheck");
+const AdminController = require("../controller/AdminController");
 const router = express.Router();
 
 // get all camp.
@@ -13,29 +15,34 @@ router.get("/get-camp/:id", AuthCheck, CampController.getCampById);
 //create camp
 router.post(
   "/admin/create-camp",
-  RoleCheck("admin"),AuthCheck,
+  AdminAuthCheck, 
+  RoleCheck("admin"),  
   campImage.single("image"),
   CampController.createCamp
 );
 
+
 //camp id
 router.post(
   "/admin/update-camp/:id",
-  RoleCheck("admin"),AuthCheck,
+  AdminAuthCheck,
+  RoleCheck("admin"),
   campImage.single("image"),
   CampController.updateCamp
 );
 //camp id
-router.delete(
+router.get(
   "/admin/delete-camp/:id",
-  RoleCheck("admin"),AuthCheck,
+  AdminAuthCheck,
+  RoleCheck("admin"),
   CampController.deleteCamp
 );
 
 //camp id
 router.get(
   "/admin/get-registrations/:id",
-  RoleCheck("admin"),AuthCheck,
+  AdminAuthCheck,
+  RoleCheck("admin"),
   CampController.getCampRegistrations
 );
 

@@ -89,7 +89,6 @@ const UserSignUp = () => {
             >
               <MenuItem value="recipient">Recipient</MenuItem>
               <MenuItem value="donor">Donor</MenuItem>
-              <MenuItem value="admin">Admin</MenuItem>
             </Select>
             {errors.role && (
               <p style={{ color: "red", fontSize: 12 }}>Role is required</p>

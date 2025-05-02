@@ -34,7 +34,7 @@ class CampController {
           address: location.address,
         },
         contactNumber,
-        organizer: req.user._id,
+        organizer: req.user.user._id,
       });
 
       if (req.file) {
@@ -42,11 +42,9 @@ class CampController {
       }
       //save data and return response
       const camp = await data.save();
-      return res.status(200).json({
-        status: true,
-        message: "Camp Created Successfully.",
-        data: data,
-      });
+      if(camp){
+        res.redirect('/admin/camps')
+      }
     } catch (error) {
       //catching error if any
       return res.status(400).json({
@@ -161,13 +159,10 @@ class CampController {
         updatedData,
         { new: true }
       );
-      if (update) {
-        return res.status(200).json({
-          status: true,
-          message: "Camp updated Successfully.",
-          data: update,
-        });
+      if (!update) {
+        return res.status(404).send("Update failed. Camp not found.");
       }
+      res.redirect(`/admin/get-camp-details/${id}`);
     } catch (error) {
       return res.status(400).json({
         status: false,
@@ -200,10 +195,7 @@ class CampController {
       //delete camp
       await BloodDonationCampModel.findByIdAndDelete(id);
 
-      return res.status(200).json({
-        status: true,
-        message: "Camp deleted successfully.",
-      });
+      return res.redirect('/admin/camps')
     } catch (error) {
       return res.status(400).json({
         status: false,
@@ -214,32 +206,46 @@ class CampController {
   //get all registered users
   async getCampRegistrations(req, res) {
     try {
-      const { id } = req.params;
+        const { id } = req.params;
 
-      // Fetch registrations for the camp
-      const registrations = await Registration.find({ camp: id })
-        .populate("user", "name email")
-        .populate("camp", "name date");
+        // Fetch registrations for the camp
+        const registrations = await Registration.find({ camp: id, status: "registered" }) 
+            .populate("user", "name email")
+            .populate({
+                path: "camp",
+                select: "name date",
+                populate: {
+                    path: "organizer", // Assuming 'organizer' is a reference to the 'User' model
+                    select: "name email" // You can choose to display any fields of the organizer here
+                }
+            });
 
-      if (!registrations.length) {
-        return res.status(404).json({
-          status: false,
-          message: "No registrations found for this camp.",
+        // Fetch camp details
+        const camp = await BloodDonationCampModel.findById(id).populate("organizer", "name email");
+
+        if (!camp) {
+            return res.status(404).json({
+                status: false,
+                message: "Camp not found.",
+            });
+        }
+
+        // If no registrations found, you still want to display the camp details
+        return res.render('campRegistrationView', {
+            user: req.user,
+            camp: camp, // Passing camp details separately
+            registrations: registrations // Passing registrations
         });
-      }
 
-      return res.status(200).json({
-        status: true,
-        message: "Registrations fetched successfully.",
-        data: registrations,
-      });
     } catch (error) {
-      return res.status(500).json({
-        status: false,
-        message: `Failed to fetch registrations: ${error.message}`,
-      });
+        return res.status(400).json({
+            status: false,
+            message: `Failed to fetch registrations: ${error.message}`,
+        });
     }
-  }
+}
+
+
   //per user
   async getRegistrationsByUser(req, res) {
     try {

@@ -40,7 +40,7 @@ const AuthCheck = async(req,res,next)=>{
 //RoleCheck for admin
 const RoleCheck = (role) => {
     return async (req, res, next) => {
-      if (req.user.role !== role) {
+      if (req.user.user.role !== role) {
         return res.status(400).json({
           status: false,
           message: "Access Denied.You are not eligible to perform this operation.",

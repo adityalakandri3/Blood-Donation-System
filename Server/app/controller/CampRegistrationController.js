@@ -29,7 +29,8 @@ class CampRegistrationController {
       const existing = await Registration.findOne({
         user: userId,
         camp: id,
-      });
+      }).populate("user", "name email")
+      .populate("camp", "name");
 
       //if existing and previously cancelled
       if (existing) {
@@ -52,15 +53,19 @@ class CampRegistrationController {
       //save registration data
       const data = new Registration({
         user: userId,
-        camp: camp,
+        camp: camp._id,
       });
       const registration = await data.save();
 
-      return res.status(200).json({
-        status: true,
-        message: "You are registered for the camp successfully.",
-        data: registration,
-      });
+      const populatedData = await Registration.findById(data._id)
+      .populate("user", "name email")
+      .populate("camp", "name");
+
+    return res.status(200).json({
+      status: true,
+      message: "You are registered for the camp successfully.",
+      data: populatedData,
+    });
     } catch (error) {
       return res.status(400).json({
         status: true,

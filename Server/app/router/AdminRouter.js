@@ -8,7 +8,10 @@ router.get('/admin/register',AdminController.registerView);
 router.get('/admin/login',AdminController.loginView);
 router.get('/',AdminAuthCheck,AdminController.CheckAuth,AdminController.dashboard)
 router.get('/logout',AdminAuthCheck,AdminController.logout)
-router.get('/admin/buttons',AdminAuthCheck,AdminController.CheckAuth,AdminController.campView)
+router.get('/admin/camps',AdminAuthCheck,AdminController.CheckAuth,AdminController.campView)
+router.get('/admin/get-camp-form',AdminAuthCheck,AdminController.CheckAuth,AdminController.campFormView)
+router.get('/admin/get-camp-details/:id',AdminAuthCheck,AdminController.CheckAuth,AdminController.getCampByIdAdmin)
+router.get('/admin/update-camp-details/:id',AdminAuthCheck,AdminController.CheckAuth,AdminController.updateCampView)
 
 
 
