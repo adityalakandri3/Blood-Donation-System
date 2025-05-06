@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useUserSignInMutation } from "../hooks/react-query/query-hooks/authQuery";
+import { Link as RouterLink } from "react-router-dom";
 
 const theme = createTheme({
   palette: {
@@ -22,10 +23,10 @@ const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: "'Montserrat', sans-serif", // Using Montserrat font
+    fontFamily: "'Montserrat', sans-serif",
     h5: {
       fontWeight: 700,
-      color: "#D32F2F", // Deep red color for heading
+      color: "#D32F2F",
     },
   },
 });
@@ -126,12 +127,30 @@ const UserSignIn = () => {
                 py: 1.5,
                 fontWeight: "bold",
                 "&:hover": {
-                  backgroundColor: "#B71C1C", // Darker red on hover
+                  backgroundColor: "#B71C1C",
                 },
               }}
             >
               Sign In
             </Button>
+
+            <Typography align="center" sx={{ mt: 2 }}>
+              Don't have an account?{" "}
+              <Button
+                component={RouterLink}
+                to="/signup"
+                size="small"
+                sx={{
+                  color: "primary.main",
+                  textTransform: "none",
+                  fontWeight: "bold",
+                  p: 0,
+                  minWidth: 0,
+                }}
+              >
+                Register
+              </Button>
+            </Typography>
           </Box>
         </Container>
       </Box>

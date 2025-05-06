@@ -10,6 +10,7 @@ import {
   Container,
   Box,
   Typography,
+  Grid,
 } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useUserSignUpMutation } from "../hooks/react-query/query-hooks/authQuery";
@@ -61,13 +62,14 @@ const UserSignUp = () => {
           backgroundColor: "background.default",
           display: "flex",
           justifyContent: "center",
-          alignItems: "center",
+          alignItems: "flex-start",
           py: 4,
         }}
       >
         <Container
-          maxWidth="xs"
+          maxWidth="md"
           sx={{
+            mt: 10, // Push below navbar
             p: 4,
             backgroundColor: "background.paper",
             borderRadius: 2,
@@ -78,155 +80,100 @@ const UserSignUp = () => {
             Create Your <span style={{ color: "#D32F2F" }}>Cell</span> Account
           </Typography>
           <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
-            <TextField
-              label="Name"
-              fullWidth
-              margin="normal"
-              {...register("name", { required: true })}
-              error={!!errors.name}
-              helperText={errors.name && "Name is required"}
-              sx={{
-                "& .MuiInputBase-root": {
-                  "&:hover fieldset": {
-                    borderColor: "primary.main",
-                  },
-                  "&.Mui-focused fieldset": {
-                    borderColor: "primary.main",
-                  },
-                },
-              }}
-            />
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  label="Name"
+                  fullWidth
+                  {...register("name", { required: true })}
+                  error={!!errors.name}
+                  helperText={errors.name && "Name is required"}
+                />
+              </Grid>
 
-            <TextField
-              label="Email"
-              fullWidth
-              margin="normal"
-              {...register("email", { required: true })}
-              error={!!errors.email}
-              helperText={errors.email && "Email is required"}
-              sx={{
-                "& .MuiInputBase-root": {
-                  "&:hover fieldset": {
-                    borderColor: "primary.main",
-                  },
-                  "&.Mui-focused fieldset": {
-                    borderColor: "primary.main",
-                  },
-                },
-              }}
-            />
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  label="Email"
+                  fullWidth
+                  {...register("email", { required: true })}
+                  error={!!errors.email}
+                  helperText={errors.email && "Email is required"}
+                />
+              </Grid>
 
-            <TextField
-              type="password"
-              label="Password"
-              fullWidth
-              margin="normal"
-              {...register("password", { required: true })}
-              error={!!errors.password}
-              helperText={errors.password && "Password is required"}
-              sx={{
-                "& .MuiInputBase-root": {
-                  "&:hover fieldset": {
-                    borderColor: "primary.main",
-                  },
-                  "&.Mui-focused fieldset": {
-                    borderColor: "primary.main",
-                  },
-                },
-              }}
-            />
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  type="password"
+                  label="Password"
+                  fullWidth
+                  {...register("password", { required: true })}
+                  error={!!errors.password}
+                  helperText={errors.password && "Password is required"}
+                />
+              </Grid>
 
-            <FormControl fullWidth margin="normal" error={!!errors.role}>
-              <InputLabel>Role</InputLabel>
-              <Select
-                defaultValue=""
-                {...register("role", { required: true })}
-                label="Role"
-                sx={{
-                  "&:hover .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "primary.main",
-                  },
-                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "primary.main",
-                  },
-                }}
-              >
-                <MenuItem value="recipient">Recipient</MenuItem>
-                <MenuItem value="donor">Donor</MenuItem>
-                <MenuItem value="admin">Admin</MenuItem>
-              </Select>
-              {errors.role && (
-                <Typography variant="caption" color="error">
-                  Role is required
-                </Typography>
-              )}
-            </FormControl>
+              <Grid item xs={12} sm={6}>
+                <FormControl fullWidth error={!!errors.role}>
+                  <InputLabel>Role</InputLabel>
+                  <Select
+                    defaultValue=""
+                    {...register("role", { required: true })}
+                    label="Role"
+                  >
+                    <MenuItem value="recipient">Recipient</MenuItem>
+                    <MenuItem value="donor">Donor</MenuItem>
+                    <MenuItem value="admin">Admin</MenuItem>
+                  </Select>
+                  {errors.role && (
+                    <Typography variant="caption" color="error">
+                      Role is required
+                    </Typography>
+                  )}
+                </FormControl>
+              </Grid>
 
-            <FormControl fullWidth margin="normal" error={!!errors.bloodType}>
-              <InputLabel>Blood Type</InputLabel>
-              <Select
-                defaultValue=""
-                {...register("bloodType", { required: true })}
-                label="Blood Type"
-                sx={{
-                  "&:hover .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "primary.main",
-                  },
-                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "primary.main",
-                  },
-                }}
-              >
-                {["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"].map((bt) => (
-                  <MenuItem key={bt} value={bt}>
-                    {bt}
-                  </MenuItem>
-                ))}
-              </Select>
-              {errors.bloodType && (
-                <Typography variant="caption" color="error">
-                  Blood type is required
-                </Typography>
-              )}
-            </FormControl>
+              <Grid item xs={12} sm={6}>
+                <FormControl fullWidth error={!!errors.bloodType}>
+                  <InputLabel>Blood Type</InputLabel>
+                  <Select
+                    defaultValue=""
+                    {...register("bloodType", { required: true })}
+                    label="Blood Type"
+                  >
+                    {["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"].map((bt) => (
+                      <MenuItem key={bt} value={bt}>
+                        {bt}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  {errors.bloodType && (
+                    <Typography variant="caption" color="error">
+                      Blood type is required
+                    </Typography>
+                  )}
+                </FormControl>
+              </Grid>
 
-            <TextField
-              label="State"
-              fullWidth
-              margin="normal"
-              {...register("location.state", { required: true })}
-              error={!!errors.location?.state}
-              helperText={errors.location?.state && "State is required"}
-              sx={{
-                "& .MuiInputBase-root": {
-                  "&:hover fieldset": {
-                    borderColor: "primary.main",
-                  },
-                  "&.Mui-focused fieldset": {
-                    borderColor: "primary.main",
-                  },
-                },
-              }}
-            />
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  label="State"
+                  fullWidth
+                  {...register("location.state", { required: true })}
+                  error={!!errors.location?.state}
+                  helperText={errors.location?.state && "State is required"}
+                />
+              </Grid>
 
-            <TextField
-              label="City"
-              fullWidth
-              margin="normal"
-              {...register("location.city", { required: true })}
-              error={!!errors.location?.city}
-              helperText={errors.location?.city && "City is required"}
-              sx={{
-                "& .MuiInputBase-root": {
-                  "&:hover fieldset": {
-                    borderColor: "primary.main",
-                  },
-                  "&.Mui-focused fieldset": {
-                    borderColor: "primary.main",
-                  },
-                },
-              }}
-            />
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  label="City"
+                  fullWidth
+                  {...register("location.city", { required: true })}
+                  error={!!errors.location?.city}
+                  helperText={errors.location?.city && "City is required"}
+                />
+              </Grid>
+            </Grid>
 
             <Button
               type="submit"
@@ -234,11 +181,11 @@ const UserSignUp = () => {
               color="primary"
               fullWidth
               sx={{
-                mt: 3,
+                mt: 4,
                 py: 1.5,
                 fontWeight: "bold",
                 "&:hover": {
-                  backgroundColor: "#B71C1C", // Darker red on hover
+                  backgroundColor: "#B71C1C",
                 },
               }}
             >

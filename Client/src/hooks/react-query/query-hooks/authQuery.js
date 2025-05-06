@@ -56,7 +56,7 @@ export const useUserSignInMutation = () => {
         localStorage.setItem("name", name)
         localStorage.setItem("message", message)
 
-        navigate("/homepage"); // redirect to dashboard on success
+        navigate("/"); // redirect to dashboard on success
         queryClient.invalidateQueries({ queryKey: [USERS] });
       } else {
         navigate("/signin"); // stay or redirect back on failure

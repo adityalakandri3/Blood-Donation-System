@@ -1,6 +1,5 @@
 import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Home from "./components/Home.jsx";
 import Root from "./layouts/Root.jsx";
 import UserSignUp from "./components/UserSignUp.jsx";
 import UserSignIn from "./components/UserSignIn.jsx";
@@ -19,7 +18,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Home />,
+        element: <HomePage />,
       },
       {
         path: "/signup",
@@ -36,10 +35,7 @@ const router = createBrowserRouter([
       {
         element: <AuthRouter />,
         children: [
-          {
-            path: "/homepage",
-            element: <HomePage />,
-          },
+         
           {
             path: "/bloodrequest",
             element: <BloodRequest />,
