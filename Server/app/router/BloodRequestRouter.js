@@ -3,34 +3,41 @@ const router = express.Router();
 const BloodRequestController = require("../controller/BloodRequest");
 const { AuthCheck, RoleCheck } = require("../middleware/Auth");
 
-// Create a blood request
-
+// Create a blood request (only recipients)
 router.post(
-  "/create-blood-request",AuthCheck,
+  "/create-blood-request",
+  AuthCheck,
   RoleCheck("recipient"),
   BloodRequestController.createBloodRequest
 );
 
-// Get all blood requests
-router.get("/get-blood-request",AuthCheck, BloodRequestController.getAllBloodRequests);
-
-//get blood request by id
+// Get all blood requests for logged-in user
 router.get(
-  "/get-blood-request/:id",AuthCheck,
+  "/get-blood-request",
+  AuthCheck,
+  BloodRequestController.getAllBloodRequests
+);
+
+// Get a specific blood request by ID
+router.get(
+  "/get-blood-request/:id",
+  AuthCheck,
   BloodRequestController.getAllBloodRequestById
 );
 
-// Update blood request
+// Update a blood request (only recipients)
 router.put(
   "/update-blood-request/:id",
-  RoleCheck("recipient"),AuthCheck,
+  AuthCheck,
+  RoleCheck("recipient"),
   BloodRequestController.updateBloodRequest
 );
 
-//delete blood request by id
+// Delete a blood request (only recipients)
 router.delete(
   "/delete-blood-request/:id",
-  RoleCheck("recipient"),AuthCheck,
+  AuthCheck,
+  RoleCheck("recipient"),
   BloodRequestController.deleteBloodRequest
 );
 
