@@ -8,6 +8,7 @@ import OtpVerify from "./components/OtpVerify.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import BloodRequest from "./pages/BloodRequest.jsx";
 import { AuthRouter } from "./utils/AuthRouter.jsx";
+import BloodRequestedList from "./pages/BloodRequestedList.jsx";
 
 
 
@@ -42,6 +43,10 @@ const router = createBrowserRouter([
           {
             path: "/bloodrequest",
             element: <BloodRequest />,
+          },
+          {
+            path: "/bloodrequestlist",
+            element: <BloodRequestedList />,
           },
       
         ],

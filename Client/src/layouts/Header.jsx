@@ -24,7 +24,7 @@ const navigation = [
 	{ name: "Donate Money", href: "https://donorbox.org/donate-money-11" },
 	{ name: "Help Needed", href: "/contact" },
 	{ name: "Need Blood", href: "/bloodrequest", secondLast: true },
-	{ name: "Donate Blood", href: "/donate-blood", last: true },
+	{ name: "Donate Blood", href: "/bloodrequestlist", last: true },
 ];
 
 const HideOnScroll = ({ children }) => {
