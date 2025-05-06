@@ -8,7 +8,7 @@ const session=require('express-session');
 const cookieParser=require('cookie-parser');
 const bodyParser=require('body-parser');
 const dotenv = require('dotenv');
-
+const flash = require('connect-flash')
 //database connection
 const dbConnect = require('./app/config/db')
 dotenv.config();
@@ -28,6 +28,7 @@ app.use(session({
      }
   }))
 
+  app.use(flash());
   app.use(cookieParser());
 
 //setting up template engine

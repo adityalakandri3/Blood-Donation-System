@@ -33,8 +33,10 @@ class AdminController {
   //login view
   async loginView(req, res) {
     try {
+      const message = req.flash("message")[0]; // Get first message string
       return res.render("login", {
         title: "Admin Register",
+        message,
       });
     } catch (error) {
       return res.status(400).json({
@@ -55,10 +57,11 @@ async home(req, res) {
     const pendingBloodRequests = await BloodRequestModel.countDocuments({
       status: "pending",
     });
-
+    const message = req.flash('message')
     // Render the home page and pass statistics data
     res.render("home", {
       title: "Dashboard",
+      message,
       user: req.user,
       totalUsers,
       totalDonors,
