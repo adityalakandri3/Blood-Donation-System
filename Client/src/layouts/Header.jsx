@@ -16,7 +16,7 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import { NavLink, Link as RouterLink } from "react-router-dom";
-import logo from "../assets/logo.png.svg"; // <-- replace with your path
+import logo from "../assets/logo.png.svg"; // <-- update path if needed
 
 const navigation = [
 	{ name: "Home", href: "/" },
@@ -38,10 +38,7 @@ const HideOnScroll = ({ children }) => {
 
 const Header = () => {
 	const [mobileOpen, setMobileOpen] = useState(false);
-
-	const toggleDrawer = (open) => () => {
-		setMobileOpen(open);
-	};
+	const toggleDrawer = (open) => () => setMobileOpen(open);
 
 	return (
 		<>
@@ -49,25 +46,37 @@ const Header = () => {
 				<AppBar
 					position="fixed"
 					sx={{
-						backgroundColor: "rgba(0, 0, 0, 0.6)",
+						backgroundColor: "transparent",
 						backdropFilter: "blur(10px)",
-						borderBottom: "1px solid rgba(255, 255, 255, 0.2)",
 						boxShadow: "none",
+						borderBottom: "1px solid rgba(255, 255, 255, 0.2)",
+						color: "#fff",
 					}}
 				>
-					<Toolbar sx={{ maxWidth: 1250, mx: "auto", width: "100%" }}>
-						{/* Logo + Text */}
+					<Toolbar
+						sx={{
+							maxWidth: 1250,
+							mx: "auto",
+							width: "100%",
+							minHeight: { xs: 72, md: 88 }, // Increased height
+							px: { xs: 2, sm: 3 },
+						}}
+					>
+						{/* Logo */}
 						<RouterLink to="/" style={{ display: "flex", alignItems: "center", textDecoration: "none" }}>
-							<img src={logo} alt="HemoCell Logo" style={{ height: 30, marginRight: 8 }} />
-							<Typography variant="h6" sx={{ fontWeight: "bold", color: "white" }}>
+							<img src={logo} alt="HemoCell Logo" style={{ height: 42, marginRight: 12 }} /> {/* Bigger logo */}
+							<Typography
+								variant="h5" // Larger heading
+								sx={{ fontWeight: "bold", color: "white" }}
+							>
 								Hemo
 								<Box component="span" sx={{ color: "red" }}>Cell</Box>
 							</Typography>
 						</RouterLink>
 
-						{/* Desktop Nav */}
+						{/* Desktop Menu */}
 						<Box sx={{ flexGrow: 1 }} />
-						<Box sx={{ display: { xs: "none", lg: "flex" }, gap: 1 }}>
+						<Box sx={{ display: { xs: "none", lg: "flex" }, gap: 2 }}>
 							{navigation.map((item) => (
 								<Button
 									key={item.name}
@@ -76,6 +85,10 @@ const Header = () => {
 									sx={{
 										color: "white",
 										textTransform: "none",
+										fontSize: "1rem",
+										px: 2,
+										py: 1.2,
+										borderRadius: "8px",
 										border: item.secondLast ? "1px solid rgba(255,255,255,0.6)" : "none",
 										backgroundColor: item.last ? "#4a0000" : "transparent",
 										"&:hover": {
@@ -89,14 +102,14 @@ const Header = () => {
 							))}
 						</Box>
 
-						{/* Mobile Menu */}
+						{/* Mobile Menu Icon */}
 						<IconButton
 							color="inherit"
 							edge="end"
 							onClick={toggleDrawer(true)}
 							sx={{ display: { lg: "none" } }}
 						>
-							<MenuIcon />
+							<MenuIcon sx={{ fontSize: 30 }} />
 						</IconButton>
 					</Toolbar>
 				</AppBar>
@@ -107,7 +120,7 @@ const Header = () => {
 				<Box sx={{ p: 2, width: "80vw" }}>
 					<Box display="flex" justifyContent="space-between" alignItems="center">
 						<RouterLink to="/" style={{ display: "flex", alignItems: "center", textDecoration: "none" }}>
-							<img src={logo} alt="HemoCell Logo" style={{ height: 30, marginRight: 8 }} />
+							<img src={logo} alt="HemoCell Logo" style={{ height: 36, marginRight: 8 }} />
 							<Typography variant="h6" sx={{ fontWeight: "bold", color: "black" }}>
 								Hemo
 								<Box component="span" sx={{ color: "red" }}>Cell</Box>
@@ -129,6 +142,8 @@ const Header = () => {
 								sx={{
 									mb: 1,
 									borderRadius: 1,
+									fontSize: "1.1rem",
+									py: 1.4,
 									color: item.last ? "white" : "black",
 									bgcolor: item.last ? "#4a0000" : "transparent",
 									border: item.secondLast ? "1px solid rgba(0,0,0,0.5)" : "none",
