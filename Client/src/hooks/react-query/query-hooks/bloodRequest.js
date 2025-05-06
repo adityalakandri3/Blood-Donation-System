@@ -12,7 +12,7 @@ export const useCreateBloodRequestMutation = () => {
       const { status } = response || {};
       if (status === true) {
         queryClient.invalidateQueries({ queryKey: [BLOOD_REQUESTS] });
-        navigate("/blood-request-list");
+        navigate("/bloodrequestlist");
       }
     },
     onError: (error) => {
