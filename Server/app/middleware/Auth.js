@@ -48,7 +48,6 @@ const AuthCheck = async (req, res, next) => {
 
 // Role check middleware
 const RoleCheck = (role) => {
-<<<<<<< HEAD
   return async (req, res, next) => {
     if (!req.user || req.user.role !== role) {
       return res.status(403).json({
@@ -57,17 +56,6 @@ const RoleCheck = (role) => {
       });
     }
     next();
-=======
-    return async (req, res, next) => {
-      if (req.user.role !== role) {
-        return res.status(400).json({
-          status: false,
-          message: "Access Denied.You are not eligible to perform this operation.",
-        });
-      }
-      next();
-    };
->>>>>>> d87bb1de0eabb02bef8cf35f64fe159201ef5727
   };
 };
 
