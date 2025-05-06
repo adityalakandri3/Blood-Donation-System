@@ -55,6 +55,7 @@ class UserController {
       }
 
       if (role === "admin") {
+        req.flash('message','Admin Registered Successfully.Please login.');
         // Redirect to login page after admin registration
         return res.redirect("/admin/login");
       }
@@ -72,7 +73,7 @@ class UserController {
         status: false,
         message: `Something went wrong while creating user: ${error.message}`,
       });
-      s;
+      
     }
   }
   //Verify OTP
@@ -205,6 +206,7 @@ class UserController {
         });
         if (tokendata) {
           res.cookie("userToken", tokendata);
+          req.flash('message',"Admin login successful.")
           console.log("Admin logged in");
           return res.redirect("/");
         } else {

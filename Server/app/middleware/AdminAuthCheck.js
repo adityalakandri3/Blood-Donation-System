@@ -14,7 +14,7 @@ const AdminAuthCheck = (req, res, next) => {
       req.user = null;
       return next();
     }
-    req.user = data; 
+    req.user = data.user; 
     next();
   });
 };

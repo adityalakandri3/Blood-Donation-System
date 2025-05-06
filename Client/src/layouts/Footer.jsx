@@ -38,7 +38,7 @@ const Footer = () => {
 							Hemo<span style={{ color: "red" }}>Cell</span>
 						</Typography>
 						<Typography variant="h6" sx={{ mt: 1, fontWeight: "normal" }}>
-							You don't have to be a doctor to save a life: Just donate blood
+							You dont have to be a doctor to save a life: Just donate blood
 						</Typography>
 					</Grid>
 

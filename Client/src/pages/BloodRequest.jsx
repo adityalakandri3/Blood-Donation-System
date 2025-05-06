@@ -1,14 +1,16 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Box, Button, TextField, Typography, Paper, Grid } from '@mui/material';
-import { createBloodRequest } from '../Api/functions/bloodRequestApi';
+import {useCreateBloodRequestMutation} from '../hooks/react-query/query-hooks/bloodRequest'
 
 const BloodRequest = () => {
   const { register, handleSubmit, formState: { errors }, reset } = useForm();
 
+
+  const {mutate} =  useCreateBloodRequestMutation();
   const onSubmit = async (data) => {
     console.log("Submitted Data:", data);
-
+    mutate(data);
   };
 
   return (
