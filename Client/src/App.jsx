@@ -8,6 +8,7 @@ import HomePage from "./pages/HomePage.jsx";
 import BloodRequest from "./pages/BloodRequest.jsx";
 import { AuthRouter } from "./utils/AuthRouter.jsx";
 import BloodRequestedList from "./pages/BloodRequestedList.jsx";
+import BloodCampList from "./pages/BloodCampList.jsx";
 
 
 
@@ -43,6 +44,10 @@ const router = createBrowserRouter([
           {
             path: "/bloodrequestlist",
             element: <BloodRequestedList />,
+          },
+          {
+            path: "/bloodcamp",
+            element: <BloodCampList />,
           },
       
         ],

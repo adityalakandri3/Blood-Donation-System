@@ -5,11 +5,20 @@ import {
   Grid,
   CardMedia,
   Button,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
 } from '@mui/material';
 import poster from '../assets/homeimage.jpg';
 import donateImg from '../assets/Card1.jpg';
 import requestImg from '../assets/Cards2.jpg';
 import ribbonImage from '../assets/requested.jpg';
+import banImage from '../assets/ban.jpg';
+import ban2Image from '../assets/ban2.jpg';
+import lastImage from '../assets/lastimg.jpg';
+import { Link } from 'react-router-dom';
+import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 
 const HomePage = () => {
   return (
@@ -274,6 +283,198 @@ const HomePage = () => {
           </Grid>
         </Grid>
       </Box>
+
+      <Box
+  sx={{
+    maxWidth: 1200,
+    mx: 'auto',
+    px: 2,
+    mb: 10,
+  }}
+>
+  <Box
+    sx={{
+      backgroundImage: `url(${banImage})`, // You can use another image if needed
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      borderRadius: 2,
+      position: 'relative',
+      color: '#fff',
+      p: { xs: 4, sm: 6 },
+      minHeight: 200,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      textAlign: 'center',
+    }}
+  >
+    <Box
+      sx={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        borderRadius: 2,
+        zIndex: 1,
+      }}
+    />
+    <Typography
+      variant="h6"
+      sx={{
+        fontStyle: 'italic',
+        fontWeight: 400,
+        lineHeight: 1.6,
+        maxWidth: 800,
+        zIndex: 2,
+      }}
+    >
+      “The blood you donate gives someone another chance at life.
+      <br />
+      One day that someone may be a close relative, a friend, a loved one—or even you.”
+    </Typography>
+  </Box>
+</Box>
+
+{/* Why Should You Donate Blood Section */}
+<Box sx={{ maxWidth: 1200, mx: 'auto', px: 2, mb: 10 }}>
+  <Grid container spacing={4} alignItems="center">
+    <Grid item xs={12} md={6}>
+      <Box
+        component="img"
+        src={ban2Image} // You can use a new image if needed
+        alt="Why Donate Blood"
+        sx={{ width: '100%', borderRadius: 2 }}
+      />
+    </Grid>
+    <Grid item xs={12} md={6}>
+      <Typography
+        variant="subtitle2"
+        sx={{
+          textTransform: 'uppercase',
+          color: '#6b0000',
+          fontWeight: 600,
+          letterSpacing: 1,
+          mb: 1,
+        }}
+      >
+        Donate Blood Today
+      </Typography>
+      <Typography
+        variant="h4"
+        sx={{ fontWeight: 'bold', mb: 2 }}
+      >
+        Why Should You Donate Blood?
+      </Typography>
+      <Typography variant="body1" sx={{ color: 'text.secondary', lineHeight: 1.8 }}>
+        Donating blood is a selfless act that has the power to save lives.
+        You could help save up to three lives with just one donation. Blood is
+        always needed in emergency situations, surgeries, cancer treatment, and
+        other procedures. It cannot be manufactured and relies on volunteers.
+        It also has health benefits for donors, like reduced risk of heart disease
+        and cancer.
+      </Typography>
+
+      <Button
+              variant="contained"
+              sx={{
+                backgroundColor: '#3c0000',
+                color: '#fff',
+                fontWeight: 'bold',
+                textTransform: 'none',
+                px: 4,
+                py: 1.5,
+                mt: 3,
+                '&:hover': {
+                  backgroundColor: '#5c0000',
+                },
+              }}
+              href="/bloodrequest"
+            >
+              Donate Now
+            </Button>
+    </Grid>
+  </Grid>
+</Box>
+
+<Box
+  sx={{
+    position: 'relative',
+    color: '#fff',
+    backgroundImage: `url(${lastImage})`, // Replace with your actual image path
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    minHeight: '400px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    p: 4,
+  }}
+>
+  <Box sx={{ 
+    backgroundColor: 'rgba(0,0,0,0.90)', 
+    p: 4, 
+    borderRadius: 2,
+    width: '100%',
+   
+    
+    
+  }}>
+    <Typography variant="subtitle1" sx={{ letterSpacing: 2 }}>
+      ARE YOU READY?
+    </Typography>
+    <Typography variant="h3" fontWeight="bold" gutterBottom>
+      Eligibility Criteria
+    </Typography>
+    <List>
+      <ListItem disablePadding>
+        <ListItemIcon sx={{ minWidth: 32 }}>
+          <RadioButtonUncheckedIcon sx={{ color: '#fff' }} />
+        </ListItemIcon>
+        <ListItemText primary="18–50 years, above 50 Kg." />
+      </ListItem>
+
+      <ListItem disablePadding>
+        <ListItemIcon sx={{ minWidth: 32 }}>
+          <RadioButtonUncheckedIcon sx={{ color: '#fff' }} />
+        </ListItemIcon>
+        <ListItemText primary="Normal temperature, pulse and blood pressure." />
+      </ListItem>
+
+      <ListItem disablePadding>
+        <ListItemIcon sx={{ minWidth: 32 }}>
+          <RadioButtonUncheckedIcon sx={{ color: '#fff' }} />
+        </ListItemIcon>
+        <ListItemText primary="No Respiratory Diseases" />
+      </ListItem>
+
+      <ListItem disablePadding>
+        <ListItemIcon sx={{ minWidth: 32 }}>
+          <RadioButtonUncheckedIcon sx={{ color: '#fff' }} />
+        </ListItemIcon>
+        <ListItemText primary="Above 12.5 g/dL Hemoglobin" />
+      </ListItem>
+
+      <ListItem disablePadding>
+        <ListItemIcon sx={{ minWidth: 32 }}>
+          <RadioButtonUncheckedIcon sx={{ color: '#fff' }} />
+        </ListItemIcon>
+        <ListItemText primary="No skin disease, puncture or scars" />
+      </ListItem>
+
+      <ListItem disablePadding>
+        <ListItemIcon sx={{ minWidth: 32 }}>
+          <RadioButtonUncheckedIcon sx={{ color: '#fff' }} />
+        </ListItemIcon>
+        <ListItemText primary="No history of transmissible disease" />
+      </ListItem>
+    </List>
+  </Box>
+</Box>
+
+
+
     </>
   );
 };

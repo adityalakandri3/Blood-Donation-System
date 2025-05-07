@@ -4,10 +4,10 @@ import { NavLink } from "react-router-dom";
 const Footer = () => {
 	const exploreLinks = [
 		{ title: "Home", link: "/" },
-		{ title: "Donate Blood", link: "/donate-blood" },
-		{ title: "Request Blood", link: "/need-blood" },
+		{ title: "Donate Blood", link: "/bloodrequestlist" },
+		{ title: "Request Blood", link: "/bloodrequest" },
 		{ title: "Donate Money", link: "https://donorbox.org/donate-money-11" },
-		{ title: "Host Blood Drive", link: "/host-blood-drive" },
+		{ title: "Blood Drive Camp ", link: "/bloodcamp" },
 		{ title: "Contact", link: "/contact" },
 		{ title: "Admin Dashboard", link: "/admin" },
 	];
