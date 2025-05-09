@@ -55,7 +55,7 @@ class UserController {
       }
 
       if (role === "admin") {
-        req.flash('message','Admin Registered Successfully.Please login.');
+        req.flash("message", "Admin Registered Successfully.Please login.");
         // Redirect to login page after admin registration
         return res.redirect("/admin/login");
       }
@@ -73,7 +73,6 @@ class UserController {
         status: false,
         message: `Something went wrong while creating user: ${error.message}`,
       });
-      
     }
   }
   //Verify OTP
@@ -206,7 +205,7 @@ class UserController {
         });
         if (tokendata) {
           res.cookie("userToken", tokendata);
-          req.flash('message',"Admin login successful.")
+          req.flash("message", "Admin login successful.");
           console.log("Admin logged in");
           return res.redirect("/");
         } else {
@@ -252,44 +251,46 @@ class UserController {
   //update password
   async updatePassword(req, res) {
     try {
-      const { user_id, password } = req.body;
-      if (!password) {
+      const userId = req.user._id; 
+      const { password, confirmPassword } = req.body;
+  
+      // Validate both fields
+      if (!password || !confirmPassword) {
         return res.status(400).json({
           status: false,
-          message: "Password is required",
+          message: "Both password and confirm password are required",
         });
       }
-      //finding user
-      const userdata = await User.findOne({ _id: user_id });
-      if (userdata) {
-        const newPassword = await hashedPassword(password);
-
-        //if user is present updating password
-        const updateuser = await User.findOneAndUpdate(
-          { _id: user_id },
-          {
-            $set: {
-              password: newPassword,
-            },
-          }
-        );
-        return res.status(200).json({
-          status: true,
-          message: "Password updated successfully",
-        });
-      } else {
+  
+      // Check if passwords match
+      if (password !== confirmPassword) {
         return res.status(400).json({
           status: false,
-          message: "Password not updated",
+          message: "Passwords do not match",
         });
       }
+  
+      // Hash the new password
+      const newPassword = await hashedPassword(password);
+  
+      // Update user's password
+      await User.findByIdAndUpdate(userId, {
+        $set: { password: newPassword },
+      });
+  
+      return res.status(200).json({
+        status: true,
+        message: "Password updated successfully",
+      });
     } catch (err) {
-      return res.status(400).json({
+      return res.status(500).json({
         status: false,
-        message: `Something went wrong,${err.message}`,
+        message: `Something went wrong: ${err.message}`,
       });
     }
   }
+  
+  
   //reset password link
   async resetPasswordLink(req, res) {
     try {
@@ -407,16 +408,33 @@ class UserController {
   }
   //dashboard
   async userDashboard(req, res) {
+    const userId = req.user._id;
+
     try {
+      const user = await User.findById(userId);
+      if (!user) {
+        return res.status(404).json({
+          status: false,
+          message: "User not found",
+        });
+      }
       return res.status(200).json({
         status: true,
-        message: "Welcome to Dashboard",
-        data: req.user,
+        message: "Welcome to the Dashboard",
+        data: {
+          id:user._id,
+          name: user.name,
+          role:user.role,
+          email: user.email,
+          bloodType: user.bloodType,
+          location: user.location,
+        },
       });
     } catch (error) {
-      return res.status(400).json({
+      // Handle any errors during the database query
+      return res.status(500).json({
         status: false,
-        message: `Something went wrong,${error.message}`,
+        message: `Something went wrong: ${error.message}`,
       });
     }
   }
@@ -447,27 +465,17 @@ class UserController {
   async updateUser(req, res) {
     try {
       const { id } = req.params;
-      const { name, password, role, bloodType, location } = req.body;
+      const { name, role, bloodType, location } = req.body;
       //checking if all the fields are present
-      if (
-        !name ||
-        !password ||
-        !role ||
-        !bloodType ||
-        !location?.state ||
-        !location?.city
-      ) {
+      if (!name || !bloodType || !location?.state || !location?.city) {
         return res.status(400).json({
           status: false,
           message: "All fields are required.",
         });
       }
-      //hashing Password
-      const hashPassword = await hashedPassword(password);
+
       const updatedData = {
         name,
-        password: hashPassword,
-        role,
         bloodType,
         location,
       };
