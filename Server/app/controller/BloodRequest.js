@@ -102,7 +102,6 @@ class BloodRequestController {
   async updateBloodRequest(req, res) {
     try {
       const { id } = req.params;
-      const recipient = req.user._id;
       const { bloodRequested, location } = req.body;
       if (!bloodRequested || !location.state || !location.city) {
         return res.status(400).json({
@@ -112,7 +111,6 @@ class BloodRequestController {
       }
 
       const updatedData = {
-        recipient,
         bloodRequested,
         location,
       };

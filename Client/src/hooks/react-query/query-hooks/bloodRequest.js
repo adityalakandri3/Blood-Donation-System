@@ -20,7 +20,7 @@ export const useCreateBloodRequestMutation = () => {
       if (status === true) {
         toast.success(message || "Blood request created successfully");
         queryClient.invalidateQueries({ queryKey: [BLOOD_REQUESTS] });
-        navigate("/bloodrequestlist");
+        navigate("/blood-request-list");
       } else {
         toast.error(message || "Failed to create blood request");
       }
@@ -33,25 +33,33 @@ export const useCreateBloodRequestMutation = () => {
   });
 };
 
-export const useUpdateBloodRequestMutation = () => {
+// Fetch a single blood request by ID
+export const  useGetBloodRequestById= (id) => {
+  return useQuery({
+    queryKey: [BLOOD_REQUESTS, id],
+    queryFn: () => getBloodRequestById(id),
+  });
+};
+export const useUpdateBloodRequest = () => {
   const { queryClient, navigate } = useGlobalHooks();
 
   return useMutation({
-    mutationFn: ({ id, input }) => updateBloodRequest(id, input),
+    mutationFn: ({ id, data }) => updateBloodRequest(id, data),
     onSuccess: (response) => {
       const { status, message } = response || {};
+
       if (status === true) {
-        toast.success(message || "Blood request updated successfully");
+        toast.success(message || "Blood Request updated successfully");
         queryClient.invalidateQueries({ queryKey: [BLOOD_REQUESTS] });
-        navigate("/blood-request-updated");
+        navigate("/blood-request-list");
       } else {
-        toast.error(message || "Failed to update blood request");
+        toast.error(message || "Blood Request update failed");
       }
     },
     onError: (error) => {
-      const errMsg = error.response?.data?.message || error.message;
-      toast.error(`Update request failed: ${errMsg}`);
-      console.error("Update request failed:", errMsg);
+      toast.error(
+        error.response?.data?.message || "Something went wrong during update"
+      );
     },
   });
 };
@@ -86,11 +94,3 @@ export const useGetAllBloodRequestsQuery = () => {
   });
 };
 
-// Fetch a single blood request by ID
-export const useGetBloodRequestByIdQuery = (id) => {
-  return useQuery({
-    queryKey: [BLOOD_REQUESTS, id],
-    queryFn: () => getBloodRequestById(id),
-    enabled: !!id,
-  });
-};

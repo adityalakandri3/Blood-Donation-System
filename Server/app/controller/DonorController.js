@@ -8,7 +8,6 @@ class DonorController {
       //find blood thats donor blood type and status is pending
       const requests = await BloodRequestModel.find({
         bloodRequested: donorBloodType,
-        status: "pending",
       }).populate("recipient", "name email ");
       //if not found
       if (!requests) {

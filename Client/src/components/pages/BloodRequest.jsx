@@ -1,152 +1,197 @@
-import React from 'react';
-import { useForm } from 'react-hook-form';
+import React from "react";
+import { useForm } from "react-hook-form";
 import {
-  Box,
-  Button,
   TextField,
+  Button,
+  Container,
+  Box,
   Typography,
-  Paper,
+  MenuItem,
   Grid,
-  MenuItem
-} from '@mui/material';
-import { useCreateBloodRequestMutation } from '../../hooks/react-query/query-hooks/bloodRequest';
-import bannerImage from '../../assets/requested.jpg'; 
+  Paper,
+  Alert,
+} from "@mui/material";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useCreateBloodRequestMutation } from "../../hooks/react-query/query-hooks/bloodRequest";
+import bannerImage from "../../assets/requested.jpg";
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#D32F2F",
+      contrastText: "#fff",
+    },
+    background: {
+      default: "#f5f5f5",
+      paper: "#ffffff",
+    },
+  },
+  typography: {
+    fontFamily: "'Montserrat', sans-serif",
+    h4: {
+      fontWeight: 700,
+      color: "#D32F2F",
+    },
+  },
+});
 
 const BloodRequest = () => {
-  const { register, handleSubmit, formState: { errors }, reset } = useForm();
-  const { mutate } = useCreateBloodRequestMutation();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm();
 
-  const onSubmit = async (data) => {
+  const { mutate, isError, error } = useCreateBloodRequestMutation();
+
+  const onSubmit = (data) => {
     console.log("Submitted Data:", data);
     mutate(data);
     reset();
   };
+  
 
   return (
-    <>
-      {/* Banner Section */}
+    <ThemeProvider theme={theme}>
+      {/* Banner */}
       <Box
         sx={{
           background: `url(${bannerImage}) center/cover no-repeat`,
-          minHeight: '60vh',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          color: 'white',
-          textAlign: 'center',
+          minHeight: "50vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          color: "white",
+          textAlign: "center",
           px: 2,
         }}
       >
-        <Typography variant="h6" sx={{ letterSpacing: 2 }}>
-          NEED BLOOD?
-        </Typography>
-        <Typography variant="h3" sx={{ fontWeight: 'bold', mt: 2 }}>
-          Your Blood Needs Are Our Priority.
-        </Typography>
+        <Box>
+          <Typography variant="h6" sx={{ letterSpacing: 2 }}>
+            NEED BLOOD?
+          </Typography>
+          <Typography variant="h3" sx={{ fontWeight: "bold", mt: 2 }}>
+            Your Blood Needs Are Our Priority.
+          </Typography>
+        </Box>
       </Box>
 
       {/* Form Section */}
       <Box
         sx={{
-          minHeight: '100vh',
-          backgroundColor: '#1a1a1a', // slightly lighter than black
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          p: 2,
+          minHeight: "100vh",
+          backgroundColor: "background.default",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          px: 2,
         }}
       >
-        <Paper
-          elevation={6}
-          sx={{
-            backgroundColor: 'rgba(58, 61, 71, 0.95)', // lighter form bg
-            padding: 4,
-            borderRadius: 3,
-            maxWidth: 700,
-            width: '100%',
-          }}
-        >
-          <Typography
-            variant="h4"
-            align="center"
-            sx={{ color: 'white', fontWeight: 'bold', mb: 4, letterSpacing: 2 }}
+        <Container maxWidth="sm">
+          <Paper
+            elevation={3}
+            sx={{
+              p: 4,
+              borderRadius: 3,
+              backgroundColor: "background.paper",
+            }}
           >
-            REQUEST FOR EMERGENCY BLOOD
-          </Typography>
+            <Typography
+              variant="h4"
+              align="center"
+              gutterBottom
+              sx={{ mb: 4 }}
+            >
+              Request Emergency Blood
+            </Typography>
 
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <Grid container spacing={2}>
-              {/* Blood Type Dropdown */}
-              <Grid item xs={12}>
-                <TextField
-                  label="Blood Type"
-                  select
-                  variant="filled"
-                  fullWidth
-                  InputProps={{ sx: { backgroundColor: '#5A5F6A', color: 'white' } }}
-                  InputLabelProps={{ sx: { color: 'white' } }}
-                  {...register('bloodRequested', { required: 'Blood type is required' })}
-                  error={!!errors.bloodRequested}
-                  helperText={errors.bloodRequested?.message}
-                >
-                  {['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'].map((type) => (
-                    <MenuItem key={type} value={type}>
-                      {type}
-                    </MenuItem>
-                  ))}
-                </TextField>
+            {isError && (
+              <Alert severity="error" sx={{ mb: 3, fontSize: '1rem' }}>
+                {error?.response?.data?.message ||
+                  "You need to be a recipient to request the blood."}
+              </Alert>
+            )}
+
+            <form onSubmit={handleSubmit(onSubmit)} noValidate>
+              <Grid container spacing={2}>
+                {/* Blood Type */}
+                <Grid item xs={12}>
+                  <TextField
+                    label="Blood Type"
+                    select
+                    fullWidth
+                    variant="outlined"
+                    {...register("bloodRequested", {
+                      required: "Blood type is required",
+                    })}
+                    error={!!errors.bloodRequested}
+                    helperText={errors.bloodRequested?.message}
+                  >
+                    {["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"].map(
+                      (type) => (
+                        <MenuItem key={type} value={type}>
+                          {type}
+                        </MenuItem>
+                      )
+                    )}
+                  </TextField>
+                </Grid>
+
+                {/* State */}
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    label="State"
+                    variant="outlined"
+                    fullWidth
+                    {...register("location.state", {
+                      required: "State is required",
+                    })}
+                    error={!!errors?.location?.state}
+                    helperText={errors?.location?.state?.message}
+                  />
+                </Grid>
+
+                {/* City */}
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    label="City"
+                    variant="outlined"
+                    fullWidth
+                    {...register("location.city", {
+                      required: "City is required",
+                    })}
+                    error={!!errors?.location?.city}
+                    helperText={errors?.location?.city?.message}
+                  />
+                </Grid>
               </Grid>
 
-              {/* Location - State */}
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="State"
-                  variant="filled"
-                  fullWidth
-                  InputProps={{ sx: { backgroundColor: '#5A5F6A', color: 'white' } }}
-                  InputLabelProps={{ sx: { color: 'white' } }}
-                  {...register('location.state', { required: 'State is required' })}
-                  error={!!errors?.location?.state}
-                  helperText={errors?.location?.state?.message}
-                />
-              </Grid>
-
-              {/* Location - City */}
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="City"
-                  variant="filled"
-                  fullWidth
-                  InputProps={{ sx: { backgroundColor: '#5A5F6A', color: 'white' } }}
-                  InputLabelProps={{ sx: { color: 'white' } }}
-                  {...register('location.city', { required: 'City is required' })}
-                  error={!!errors?.location?.city}
-                  helperText={errors?.location?.city?.message}
-                />
-              </Grid>
-            </Grid>
-
-            <Box textAlign="center" mt={4}>
               <Button
-                variant="contained"
-                color="error"
                 type="submit"
+                variant="contained"
+                color="primary"
+                fullWidth
                 sx={{
-                  paddingX: 4,
-                  paddingY: 1,
-                  borderRadius: 2,
-                  fontWeight: 'bold',
+                  mt: 4,
+                  py: 1.5,
+                  fontWeight: "bold",
+                  "&:hover": {
+                    backgroundColor: "#B71C1C",
+                  },
                 }}
               >
                 Request Blood
               </Button>
-            </Box>
-          </form>
-        </Paper>
+            </form>
+          </Paper>
+        </Container>
       </Box>
-    </>
+    </ThemeProvider>
   );
 };
 
 export default BloodRequest;
+
+
+

@@ -6,6 +6,6 @@ const router = express.Router()
 
 router.post('/camp-register/:id',AuthCheck,CampRegistrationController.campRegister)
 router.get('/my-registrations',AuthCheck,CampRegistrationController.myRegistrations)
-router.put('/my-registrations/cancel-registration/:id',AuthCheck,CampRegistrationController.cancelRegistration)
+router.post('/my-registrations/cancel-registration/:id',AuthCheck,CampRegistrationController.cancelRegistration)
 
 module.exports = router

@@ -151,6 +151,24 @@ const UserSignIn = () => {
                 Register
               </Button>
             </Typography>
+            <Typography align="center" >
+              Forgot password?{" "}
+              <Button
+                component={RouterLink}
+                to="/reset-password-link"
+                size="small"
+                sx={{
+                  color: "primary.main",
+                  textTransform: "none",
+                  fontWeight: "bold",
+                  p: 0,
+                  minWidth: 0,
+                }}
+              >
+                Click Here
+              </Button>
+            </Typography>
+            
           </Box>
         </Container>
       </Box>

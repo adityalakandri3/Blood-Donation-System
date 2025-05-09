@@ -9,6 +9,8 @@ import { dashboard } from "../../../api/functions/profile";
 import { fetchUserProfile } from "../../../api/functions/profileData";
 import { profileUpdate } from "../../../api/functions/profileUpdate";
 import { updatePassword } from "../../../api/functions/updatePassword";
+import { resetPasswordLink } from "../../../api/functions/resetPasswordLink";
+import { resetPassword } from "../../../api/functions/resetPassword";
 
 export const useUserSignUpMutation = () => {
   const { queryClient, navigate } = useGlobalHooks();
@@ -134,6 +136,47 @@ export const useUpdatePassword = () => {
         navigate("/profile");
       } else {
         toast.error(message || "Password update failed");
+      }
+    },
+    onError: (error) => {
+      toast.error(error.response?.data?.message || "Something went wrong.");
+    },
+  });
+};
+
+export const useSendResetLink = () => {
+  const { queryClient, navigate } = useGlobalHooks();
+
+  return useMutation({
+    mutationFn: (data) => resetPasswordLink(data),
+    onSuccess: (response) => {
+      const { status, message } = response || {};
+      if (status === true) {
+        toast.success(message || "Link to reset password has been sent to your email successfully.");
+        queryClient.invalidateQueries({ queryKey: [USERS] });
+        navigate("/signin");
+      } else {
+        toast.error(message || "Link sent failed.");
+      }
+    },
+    onError: (error) => {
+      toast.error(error.response?.data?.message || "Something went wrong.");
+    },
+  });
+};
+
+export const useResetPassword = () => {
+  const { navigate } = useGlobalHooks();
+
+  return useMutation({
+    mutationFn: (newdata) => resetPassword(newdata),
+    onSuccess: (response) => {
+      const { status, message } = response || {};
+      if (status === true) {
+        toast.success(message || "Password reset successful.");
+        navigate("/signin");
+      } else {
+        toast.error(message || "Password reset failed.");
       }
     },
     onError: (error) => {

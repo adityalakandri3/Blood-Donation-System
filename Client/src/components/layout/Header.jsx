@@ -21,10 +21,10 @@ import profileImage from "../../assets/profile.webp";
 
 const navigation = [
   { name: "Home", href: "/" },
-  { name: "Blood Drive Camp", href: "/bloodcamp" },
+  { name: "Blood Drive Camp", href: "/blood-camp-list" },
   { name: "Help Needed", href: "/contact" },
-  { name: "Need Blood", href: "/bloodrequest", secondLast: true },
-  { name: "Donate Blood", href: "/bloodrequestlist", last: true },
+  { name: "Need Blood", href: "/create-blood-request", secondLast: true },
+  { name: "Donate Blood", href: "/get-blood-request-donor", last: true },
 ];
 
 const HideOnScroll = ({ children }) => {
@@ -116,10 +116,12 @@ const Header = () => {
                     backgroundColor: item.last ? "#4a0000" : "transparent",
                     "&:hover": {
                       backgroundColor: item.last
-                        ? "white"
+                        ? "rgba(28, 27, 27, 0.2)"
                         : "rgba(255,255,255,0.2)",
-                      color: item.last ? "black" : "white",
-					  border:item.secondLast ?"1px solid white":"none"
+                      color: item.last ? "black" : "rgba(5, 5, 5, 0.69)",
+                      border: item.secondLast
+                        ? "1px solid rgba(11, 11, 11, 0.75)"
+                        : "none",
                     },
                   }}
                 >
@@ -158,7 +160,11 @@ const Header = () => {
       {/* Mobile Drawer */}
       <Drawer anchor="right" open={mobileOpen} onClose={toggleDrawer(false)}>
         <Box sx={{ p: 2, width: "80vw" }}>
-          <Box display="flex" justifyContent="space-between" alignItems="center">
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+          >
             <RouterLink
               to="/"
               style={{
@@ -172,7 +178,10 @@ const Header = () => {
                 alt="HemoCell Logo"
                 style={{ height: 36, marginRight: 8 }}
               />
-              <Typography variant="h6" sx={{ fontWeight: "bold", color: "black" }}>
+              <Typography
+                variant="h6"
+                sx={{ fontWeight: "bold", color: "black" }}
+              >
                 Hemo
                 <Box component="span" sx={{ color: "red" }}>
                   Cell
@@ -227,11 +236,7 @@ const Header = () => {
                 color: "#000",
               }}
             >
-              <Box
-                display="flex"
-                alignItems="center"
-                gap={1}
-              >
+              <Box display="flex" alignItems="center" gap={1}>
                 <img
                   src={profileImage}
                   alt="Profile"

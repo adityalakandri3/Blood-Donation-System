@@ -14,6 +14,14 @@ import 'react-toastify/dist/ReactToastify.css';
 import Profile from "./components/pages/Auth/Profile.jsx";
 import ProfileUpdate from "./components/pages/Auth/ProfileUpdate.jsx";
 import PasswordUpdate from "./components/pages/Auth/PasswordUpdate.jsx";
+import ForgotPasswordLink from "./components/pages/Auth/ForgotPasswordLink.jsx";
+import ResetPasswork from "./components/pages/Auth/ResetPasswork.jsx";
+import UpdateBloodRequest from "./components/pages/UpdateBloodRequest.jsx";
+import BloodRequestedListForDonors from "./components/pages/BloodRequestedListForDonors.jsx";
+import UpdateRequestDonor from "./components/pages/UpdateRequestDonor.jsx";
+import BloodCampDetails from "./components/pages/BloodCampDetails.jsx";
+import MyRegistrations from "./components/pages/MyRegistrations.jsx";
+import CancelRegistration from "./components/pages/CancelRegistration.jsx";
 
 const router = createBrowserRouter([
   {
@@ -37,6 +45,14 @@ const router = createBrowserRouter([
         element: <OtpVerify />,
       },
       {
+        path: "/reset-password-link",
+        element: <ForgotPasswordLink />,
+      },
+      {
+        path: "/account/reset-password/:id/:token",
+        element: <ResetPasswork />,
+      },
+      {
         element: <AuthRouter />,
         children: [
           {
@@ -52,16 +68,41 @@ const router = createBrowserRouter([
             element: <PasswordUpdate />
           },
           {
-            path: "/bloodrequest",
+            path: "/create-blood-request",
             element: <BloodRequest />,
           },
           {
-            path: "/bloodrequestlist",
+            path: "/blood-request-list",
             element: <BloodRequestedList />,
           },
           {
-            path: "/bloodcamp",
+            path: "/update-bloodrequest/:id",
+            element: <UpdateBloodRequest />,
+          },
+          {
+            path: "/get-blood-request-donor",
+            element: <BloodRequestedListForDonors />,
+          },
+          
+          {
+            path: "/update-request-donor/:id",
+            element: <UpdateRequestDonor />,
+          },
+          {
+            path: "/blood-camp-list",
             element: <BloodCampList />,
+          },
+          {
+            path: "/blood-camp/:id",
+            element: <BloodCampDetails />,
+          },
+          {
+            path: "/my-registrations",
+            element: <MyRegistrations />,
+          },
+          {
+            path: "/my-registrations/cancel-registration/:id",
+            element: <CancelRegistration />,
           },
           
       

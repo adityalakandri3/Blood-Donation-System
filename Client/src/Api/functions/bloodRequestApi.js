@@ -32,15 +32,17 @@ export const getBloodRequestById = async (id) => {
   }
 };
 
-export const updateBloodRequest = async (id, input) => {
+
+export const updateBloodRequest = async (id, updatedData) => {
   try {
-    const { data } = await axiosInstance.put(endPoints.blood_requests.update(id), input);
-    return data;
+    const { data } = await axiosInstance.post(endPoints.blood_requests.updateBlood(id), updatedData);
+    return data; 
   } catch (error) {
-    console.error("Update blood request error:", error.response?.data || error.message);
-    throw error;
+    console.error("Error updating user profile:", error.response?.data || error.message);
+    throw error; 
   }
 };
+
 
 export const deleteBloodRequest = async (id) => {
   try {

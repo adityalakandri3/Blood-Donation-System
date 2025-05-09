@@ -14,7 +14,8 @@ import {
 } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useUserSignUpMutation } from "../../../hooks/react-query/query-hooks/authQuery";
-import '@fontsource/montserrat'; // Import Montserrat font
+import "@fontsource/montserrat"; // Import Montserrat font
+import { Link as RouterLink } from "react-router-dom";
 
 const theme = createTheme({
   palette: {
@@ -139,11 +140,13 @@ const UserSignUp = () => {
                     {...register("bloodType", { required: true })}
                     label="Blood Type"
                   >
-                    {["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"].map((bt) => (
-                      <MenuItem key={bt} value={bt}>
-                        {bt}
-                      </MenuItem>
-                    ))}
+                    {["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"].map(
+                      (bt) => (
+                        <MenuItem key={bt} value={bt}>
+                          {bt}
+                        </MenuItem>
+                      )
+                    )}
                   </Select>
                   {errors.bloodType && (
                     <Typography variant="caption" color="error">
@@ -190,6 +193,41 @@ const UserSignUp = () => {
             >
               Submit
             </Button>
+
+            <Typography align="center" sx={{ mt: 2 }}>
+              Already have an account?{" "}
+              <Button
+                component={RouterLink}
+                to="/signin"
+                size="small"
+                sx={{
+                  color: "primary.main",
+                  textTransform: "none",
+                  fontWeight: "bold",
+                  p: 0,
+                  minWidth: 0,
+                }}
+              >
+                Login Here
+              </Button>
+            </Typography>
+            <Typography align="center">
+              Forgot password?{" "}
+              <Button
+                component={RouterLink}
+                to="/reset-password-link"
+                size="small"
+                sx={{
+                  color: "primary.main",
+                  textTransform: "none",
+                  fontWeight: "bold",
+                  p: 0,
+                  minWidth: 0,
+                }}
+              >
+                Click Here
+              </Button>
+            </Typography>
           </Box>
         </Container>
       </Box>

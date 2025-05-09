@@ -80,7 +80,7 @@ const Profile = () => {
           <Button
             variant="contained"
             color="primary"
-            onClick={() => navigate("/bloodrequestlist")}
+            onClick={() => navigate("/blood-request-list")}
           >
             My Requests
           </Button>

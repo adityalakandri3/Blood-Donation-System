@@ -26,7 +26,7 @@ router.get(
 );
 
 // Update a blood request (only recipients)
-router.put(
+router.post(
   "/update-blood-request/:id",
   AuthCheck,
   RoleCheck("recipient"),
