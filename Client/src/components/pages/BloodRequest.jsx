@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   TextField,
@@ -10,10 +10,14 @@ import {
   Grid,
   Paper,
   Alert,
+  FormControl,
+  InputLabel,
+  Select,
 } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useCreateBloodRequestMutation } from "../../hooks/react-query/query-hooks/bloodRequest";
 import bannerImage from "../../assets/requested.jpg";
+import { City, State } from "country-state-city";
 
 const theme = createTheme({
   palette: {
@@ -41,9 +45,32 @@ const BloodRequest = () => {
     handleSubmit,
     formState: { errors },
     reset,
+    watch,
+    setValue
   } = useForm();
 
   const { mutate, isError, error } = useCreateBloodRequestMutation();
+  
+    const [states, setState] = useState([]);
+    const [cities, setCity] = useState([]);
+  
+    const selectedStateCode = watch("location.state");
+  
+    useEffect(() => {
+      const indianStates = State.getStatesOfCountry("IN");
+      setState(indianStates);
+    }, []);
+  
+    useEffect(() => {
+      if (selectedStateCode) {
+        const stateData = states.find((s) => s.name === selectedStateCode);
+        if (stateData) {
+          const stateCities = City.getCitiesOfState("IN", stateData.isoCode);
+          setCity(stateCities);
+          setValue("location.city", "");
+        }
+      }
+    }, [selectedStateCode, setValue,states]);
 
   const onSubmit = (data) => {
     console.log("Submitted Data:", data);
@@ -138,33 +165,50 @@ const BloodRequest = () => {
                   </TextField>
                 </Grid>
 
-                {/* State */}
                 <Grid item xs={12} sm={6}>
-                  <TextField
+                <FormControl fullWidth error={!!errors.location?.state}>
+                  <InputLabel>State</InputLabel>
+                  <Select
                     label="State"
-                    variant="outlined"
-                    fullWidth
-                    {...register("location.state", {
-                      required: "State is required",
-                    })}
-                    error={!!errors?.location?.state}
-                    helperText={errors?.location?.state?.message}
-                  />
-                </Grid>
+                    {...register("location.state", { required: true })}
+                    defaultValue=""
+                  >
+                    {states.map((state) => (
+                      <MenuItem key={state.isoCode} value={state.name}>
+                        {state.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  {errors.location?.state && (
+                    <Typography variant="caption" color="error">
+                      State is required
+                    </Typography>
+                  )}
+                </FormControl>
+              </Grid>
 
-                {/* City */}
-                <Grid item xs={12} sm={6}>
-                  <TextField
+              <Grid item xs={12} sm={6}>
+                <FormControl fullWidth error={!!errors.location?.city}>
+                  <InputLabel>City</InputLabel>
+                  <Select
                     label="City"
-                    variant="outlined"
-                    fullWidth
-                    {...register("location.city", {
-                      required: "City is required",
-                    })}
-                    error={!!errors?.location?.city}
-                    helperText={errors?.location?.city?.message}
-                  />
-                </Grid>
+                    {...register("location.city", { required: true })}
+                    defaultValue="" 
+                    disabled={!selectedStateCode}
+                  >
+                    {cities.map((city) => (
+                      <MenuItem key={city.name} value={city.name}>
+                        {city.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  {errors.location?.city && (
+                    <Typography variant="caption" color="error">
+                      City is required
+                    </Typography>
+                  )}
+                </FormControl>
+              </Grid>
               </Grid>
 
               <Button

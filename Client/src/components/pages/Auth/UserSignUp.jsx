@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { State, City } from "country-state-city";
 import {
   TextField,
   MenuItem,
@@ -14,13 +15,13 @@ import {
 } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useUserSignUpMutation } from "../../../hooks/react-query/query-hooks/authQuery";
-import "@fontsource/montserrat"; // Import Montserrat font
+import "@fontsource/montserrat";
 import { Link as RouterLink } from "react-router-dom";
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#D32F2F", // Deep red
+      main: "#D32F2F",
       contrastText: "#fff",
     },
     secondary: {
@@ -46,8 +47,44 @@ const UserSignUp = () => {
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm();
+    watch,
+    setValue,
+  } = useForm({
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+      role: "",
+      bloodType: "",
+      location: {
+        state: "",
+        city: "",
+      },
+    },
+  });
+
   const { mutate } = useUserSignUpMutation();
+
+  const [states, setState] = useState([]);
+  const [cities, setCity] = useState([]);
+
+  const selectedStateCode = watch("location.state");
+
+  useEffect(() => {
+    const indianStates = State.getStatesOfCountry("IN");
+    setState(indianStates);
+  }, []);
+
+  useEffect(() => {
+    if (selectedStateCode) {
+      const stateData = states.find((s) => s.name === selectedStateCode);
+      if (stateData) {
+        const stateCities = City.getCitiesOfState("IN", stateData.isoCode);
+        setCity(stateCities);
+        setValue("location.city", "");
+      }
+    }
+  }, [selectedStateCode, setValue, states]);
 
   const onSubmit = (data) => {
     mutate(data);
@@ -70,7 +107,7 @@ const UserSignUp = () => {
         <Container
           maxWidth="md"
           sx={{
-            mt: 10, // Push below navbar
+            mt: 10,
             p: 4,
             backgroundColor: "background.paper",
             borderRadius: 2,
@@ -80,6 +117,7 @@ const UserSignUp = () => {
           <Typography variant="h4" align="center" gutterBottom>
             Create Your <span style={{ color: "#D32F2F" }}>Cell</span> Account
           </Typography>
+
           <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
@@ -157,24 +195,50 @@ const UserSignUp = () => {
               </Grid>
 
               <Grid item xs={12} sm={6}>
-                <TextField
-                  label="State"
-                  fullWidth
-                  {...register("location.state", { required: true })}
-                  error={!!errors.location?.state}
-                  helperText={errors.location?.state && "State is required"}
-                />
+                <FormControl fullWidth error={!!errors.location?.state}>
+                  <InputLabel>State</InputLabel>
+                  <Select
+                    label="State"
+                    {...register("location.state", { required: true })}
+                    defaultValue=""
+                  >
+                    {states.map((state) => (
+                      <MenuItem key={state.isoCode} value={state.name}>
+                        {state.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  {errors.location?.state && (
+                    <Typography variant="caption" color="error">
+                      State is required
+                    </Typography>
+                  )}
+                </FormControl>
               </Grid>
 
               <Grid item xs={12} sm={6}>
-                <TextField
-                  label="City"
-                  fullWidth
-                  {...register("location.city", { required: true })}
-                  error={!!errors.location?.city}
-                  helperText={errors.location?.city && "City is required"}
-                />
+                <FormControl fullWidth error={!!errors.location?.city}>
+                  <InputLabel>City</InputLabel>
+                  <Select
+                    label="City"
+                    {...register("location.city", { required: true })}
+                    defaultValue="" 
+                    disabled={!selectedStateCode}
+                  >
+                    {cities.map((city) => (
+                      <MenuItem key={city.name} value={city.name}>
+                        {city.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  {errors.location?.city && (
+                    <Typography variant="caption" color="error">
+                      City is required
+                    </Typography>
+                  )}
+                </FormControl>
               </Grid>
+              
             </Grid>
 
             <Button
@@ -211,6 +275,7 @@ const UserSignUp = () => {
                 Login Here
               </Button>
             </Typography>
+
             <Typography align="center">
               Forgot password?{" "}
               <Button
