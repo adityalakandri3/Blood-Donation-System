@@ -37,5 +37,8 @@ export const endPoints = {
     getAllrequest :'/get-blood-request-donor',
     getAllRequestByID:(id)=>`/get-blood-request-donor/${id}`,
     acceptRequest:(id)=>`/accept-blood-request/${id}`
+  },
+  contact:{
+    sendmessage:'/contact-message'
   }
 };

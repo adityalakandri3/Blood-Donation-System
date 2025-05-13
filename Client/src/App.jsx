@@ -22,6 +22,7 @@ import UpdateRequestDonor from "./components/pages/UpdateRequestDonor.jsx";
 import BloodCampDetails from "./components/pages/BloodCampDetails.jsx";
 import MyRegistrations from "./components/pages/MyRegistrations.jsx";
 import CancelRegistration from "./components/pages/CancelRegistration.jsx";
+import Contact from "./components/pages/Contact.jsx";
 
 const router = createBrowserRouter([
   {
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
       {
         path: "/account/reset-password/:id/:token",
         element: <ResetPasswork />,
+      },
+      {
+        path: "/contact",
+        element: <Contact />,
       },
       {
         element: <AuthRouter />,

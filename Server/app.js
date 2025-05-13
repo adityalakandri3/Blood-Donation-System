@@ -70,6 +70,8 @@ app.use(DonorRoute);
 const AdminRoute = require('./app/router/AdminRouter');
 app.use(AdminRoute);
 
+const ContactRoute = require('./app/router/ContactRouter');
+app.use(ContactRoute);
 //listening port
 const port = 3006;
 app.listen(port,()=>{

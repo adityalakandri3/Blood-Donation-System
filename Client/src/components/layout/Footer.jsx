@@ -4,12 +4,11 @@ import { NavLink } from "react-router-dom";
 const Footer = () => {
 	const exploreLinks = [
 		{ title: "Home", link: "/" },
-		{ title: "Donate Blood", link: "/bloodrequestlist" },
-		{ title: "Request Blood", link: "/bloodrequest" },
-		{ title: "Donate Money", link: "https://donorbox.org/donate-money-11" },
-		{ title: "Blood Drive Camp ", link: "/bloodcamp" },
+		{ title: "Donate Blood", link: "/get-blood-request-donor" },
+		{ title: "Request Blood", link: "/create-blood-request" },
+		{ title: "Blood Drive Camp ", link: "/blood-camp-list" },
 		{ title: "Contact", link: "/contact" },
-		{ title: "Admin Dashboard", link: "/admin" },
+		{ title: "Admin Dashboard", link: "http://localhost:3006/admin/login" },
 	];
 
 	const contactLinks = [
@@ -117,7 +116,7 @@ const Footer = () => {
 					<Typography variant="body2">
 						©️ 2025 HemoCell - Website design by{" "}
 						<MUILink
-							href="https://linkedin.com/in/aditya-lakandri"
+							href="https://www.linkedin.com/in/aditya-lakandri-1270b4192/"
 							target="_blank"
 							underline="hover"
 							rel="noopener"
