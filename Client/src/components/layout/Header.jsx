@@ -21,6 +21,7 @@ import profileImage from "../../assets/profile.webp";
 
 const navigation = [
   { name: "Home", href: "/" },
+  { name: "About", href: "/about" },
   { name: "Blood Drive Camp", href: "/blood-camp-list" },
   { name: "Help Needed", href: "/contact" },
   { name: "Need Blood", href: "/create-blood-request", secondLast: true },

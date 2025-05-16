@@ -23,6 +23,7 @@ import BloodCampDetails from "./components/pages/BloodCampDetails.jsx";
 import MyRegistrations from "./components/pages/MyRegistrations.jsx";
 import CancelRegistration from "./components/pages/CancelRegistration.jsx";
 import Contact from "./components/pages/Contact.jsx";
+import About from "./components/pages/About.jsx";
 
 const router = createBrowserRouter([
   {
@@ -56,6 +57,10 @@ const router = createBrowserRouter([
       {
         path: "/contact",
         element: <Contact />,
+      },
+      {
+        path: "/about",
+        element: <About/>,
       },
       {
         element: <AuthRouter />,
