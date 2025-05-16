@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useUserSignUpMutation } from "../../../hooks/react-query/query-hooks/authQuery";
-import "@fontsource/montserrat";
+import "@fontsource/montserrat"; // Import Montserrat font
 import { Link as RouterLink } from "react-router-dom";
 
 const theme = createTheme({
