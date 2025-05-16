@@ -17,11 +17,17 @@ class AdminController {
       console.log(err);
     }
   }
+
   //register view
   async registerView(req, res) {
     try {
+      const message = req.flash("message")[0];
+      const error = req.flash("error")[0];
+
       return res.render("register", {
         title: "Admin Register",
+        message,
+        error,
       });
     } catch (error) {
       return res.status(400).json({
@@ -30,13 +36,16 @@ class AdminController {
       });
     }
   }
+
   //login view
   async loginView(req, res) {
     try {
-      const message = req.flash("message")[0]; // Get first message string
+      const message = req.flash("message")[0];
+      const error = req.flash("error")[0];
       return res.render("login", {
-        title: "Admin Register",
+        title: "Admin Login",
         message,
+        error,
       });
     } catch (error) {
       return res.status(400).json({
@@ -46,39 +55,40 @@ class AdminController {
     }
   }
   //dashboard
- // Home controller method where you render the home page
-async home(req, res) {
-  try {
-    // Fetch the statistics
-    const totalUsers = await User.countDocuments({ role: { $ne: "admin" } });
-    const totalDonors = await User.countDocuments({ role: "donor" });
-    const totalRecipients = await User.countDocuments({ role: "recipient" });
-    const totalBloodRequests = await BloodRequestModel.countDocuments();
-    const pendingBloodRequests = await BloodRequestModel.countDocuments({
-      status: "pending",
-    });
-    const message = req.flash('message')
-    // Render the home page and pass statistics data
-    res.render("home", {
-      title: "Dashboard",
-      message,
-      user: req.user,
-      totalUsers,
-      totalDonors,
-      totalRecipients,
-      totalBloodRequests,
-      pendingBloodRequests,
-    });
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).send("Error occurred while fetching data.");
+  async home(req, res) {
+    try {
+      // Fetch the statistics
+      const totalUsers = await User.countDocuments({ role: { $ne: "admin" } });
+      const totalDonors = await User.countDocuments({ role: "donor" });
+      const totalRecipients = await User.countDocuments({ role: "recipient" });
+      const totalBloodRequests = await BloodRequestModel.countDocuments();
+      const pendingBloodRequests = await BloodRequestModel.countDocuments({
+        status: "pending",
+      });
+      const message = req.flash("message");
+      // Render the home page and pass statistics data
+      res.render("home", {
+        title: "Dashboard",
+        message,
+        user: req.user,
+        totalUsers,
+        totalDonors,
+        totalRecipients,
+        totalBloodRequests,
+        pendingBloodRequests,
+      });
+    } catch (error) {
+      console.error(error.message);
+      res.status(500).send("Error occurred while fetching data.");
+    }
   }
-}
 
   //logout admin
   async logout(req, res) {
     try {
+      req.flash('message',"Logged out successfully.")
       res.clearCookie("userToken"), res.redirect("/admin/login");
+      
     } catch (error) {
       console.log(error.message);
     }
@@ -237,8 +247,6 @@ async home(req, res) {
       console.log(error);
     }
   }
-
- 
 }
 
 module.exports = new AdminController();

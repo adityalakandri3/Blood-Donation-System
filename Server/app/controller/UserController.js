@@ -24,6 +24,10 @@ class UserController {
         !location?.state ||
         !location?.city
       ) {
+        if (role === "admin") {
+          req.flash("error", "All fields are required.");
+          return res.redirect("/admin/register");
+        }
         return res.status(400).json({
           status: false,
           message: "All fields are required.",
@@ -69,6 +73,10 @@ class UserController {
         data: user,
       });
     } catch (error) {
+      if (req.body.role === "admin") {
+        req.flash("error", `Error creating admin: ${error.message}`);
+        return res.redirect("/admin/register");
+      }
       return res.status(400).json({
         status: false,
         message: `Something went wrong while creating user: ${error.message}`,
@@ -187,6 +195,10 @@ class UserController {
       //Matching password
       const isMatch = await matchPassword(password, user.password);
       if (!isMatch) {
+        if(user.role === 'admin'){
+           req.flash('error',"Incorrect password.");
+          return res.redirect('/admin/login')
+        }
         return res.status(400).json({
           status: false,
           message: "Incorrect Password.",
@@ -209,7 +221,7 @@ class UserController {
           console.log("Admin logged in");
           return res.redirect("/");
         } else {
-          console.log("login failed");
+          req.flash("error", "Login Failed.")
           return res.redirect("/admin/login");
         }
       }
@@ -251,9 +263,9 @@ class UserController {
   //update password
   async updatePassword(req, res) {
     try {
-      const userId = req.user._id; 
+      const userId = req.user._id;
       const { password, confirmPassword } = req.body;
-  
+
       // Validate both fields
       if (!password || !confirmPassword) {
         return res.status(400).json({
@@ -261,7 +273,7 @@ class UserController {
           message: "Both password and confirm password are required",
         });
       }
-  
+
       // Check if passwords match
       if (password !== confirmPassword) {
         return res.status(400).json({
@@ -269,15 +281,15 @@ class UserController {
           message: "Passwords do not match",
         });
       }
-  
+
       // Hash the new password
       const newPassword = await hashedPassword(password);
-  
+
       // Update user's password
       await User.findByIdAndUpdate(userId, {
         $set: { password: newPassword },
       });
-  
+
       return res.status(200).json({
         status: true,
         message: "Password updated successfully",
@@ -289,8 +301,6 @@ class UserController {
       });
     }
   }
-  
-  
   //reset password link
   async resetPasswordLink(req, res) {
     try {
@@ -422,9 +432,9 @@ class UserController {
         status: true,
         message: "Welcome to the Dashboard",
         data: {
-          id:user._id,
+          id: user._id,
           name: user.name,
-          role:user.role,
+          role: user.role,
           email: user.email,
           bloodType: user.bloodType,
           location: user.location,
